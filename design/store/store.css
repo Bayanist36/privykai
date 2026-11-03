@@ -1,0 +1,106 @@
+/* RuStore card screenshots: 1080 x 1920 px (9:16) */
+html,
+body {
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: var(--bg-app);
+}
+body {
+  margin: 0;
+}
+.shot {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background:
+    radial-gradient(900px 620px at 92% -8%, #e4efe7 0%, rgba(228, 239, 231, 0) 62%),
+    var(--bg-app);
+}
+.deco {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--c-sand-100);
+}
+.deco--1 {
+  width: 520px;
+  height: 520px;
+  right: -180px;
+  top: 250px;
+}
+.deco--2 {
+  width: 300px;
+  height: 300px;
+  left: -140px;
+  bottom: 240px;
+  border-color: var(--c-green-100);
+}
+.copy {
+  position: absolute;
+  left: 72px;
+  top: 92px;
+  width: 900px;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 26px;
+  background: #fff;
+  border: 1px solid var(--c-green-100);
+  color: var(--c-green-700);
+  font: 600 22px/1 var(--font);
+  letter-spacing: 0.2px;
+}
+.eyebrow i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c-green-600);
+}
+.shot h1 {
+  margin: 30px 0 0;
+  font: 700 84px/96px var(--font);
+  letter-spacing: -2.2px;
+  color: var(--text-primary);
+}
+.shot .sub {
+  margin: 24px 0 0;
+  max-width: 820px;
+  font: 400 32px/44px var(--font);
+  color: var(--text-secondary);
+}
+.device {
+  position: absolute;
+  left: 252px;
+  top: 604px;
+  width: 576px;
+  height: 1280px;
+  border-radius: 44px;
+  overflow: hidden;
+  border: 2px solid rgba(24, 32, 27, 0.08);
+  background: var(--bg-app);
+  box-shadow:
+    0 48px 90px rgba(31, 92, 67, 0.2),
+    0 6px 18px rgba(24, 32, 27, 0.08);
+}
+.device img {
+  display: block;
+  width: 360px;
+  height: 800px;
+  border: 0;
+  transform: scale(1.6);
+  transform-origin: top left;
+}
+.shot--center .copy {
+  text-align: center;
+  left: 90px;
+  width: 900px;
+}
+.shot--center .sub {
+  margin-left: auto;
+  margin-right: auto;
+}

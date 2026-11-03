@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Статистика</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--scroll body--tabbar">
+        <header class="screen-head">
+          <h1 class="screen-head__title">Статистика</h1>
+        </header>
+
+        <section class="stats-summary" aria-label="Сводка за 7 дней">
+          <div class="stats-summary__top">
+            <div>
+              <p class="stats-summary__label">За последние 7 дней</p>
+              <p class="stats-summary__value">83%</p>
+            </div>
+            <div class="stats-summary__meta">
+              <b>20 из 24</b>
+              запланировано
+            </div>
+          </div>
+          <div class="stats-summary__track"><i style="width: 83%"></i></div>
+          <p class="stats-summary__note">Учитываются только запланированные дни.</p>
+        </section>
+
+        <div class="stats-section">
+          <h2 class="stats-section__title">По привычкам</h2>
+          <span class="stats-section__meta">30 дней</span>
+        </div>
+
+        <div class="stats-list">
+          <article class="stat-card" style="--habit-soft: #e4efe8">
+            <span class="stat-card__icon" aria-hidden="true">💧</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <p class="stat-card__name">Вода</p>
+                <span class="stat-card__pct">91%</span>
+              </div>
+              <p class="stat-card__meta">Серия 12 · лучшая 28</p>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--habit-soft: #f7e4df">
+            <span class="stat-card__icon" aria-hidden="true">🏃</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <p class="stat-card__name">Зарядка 10 минут</p>
+                <span class="stat-card__pct">39%</span>
+              </div>
+              <p class="stat-card__meta">Серия 0 · лучшая 9</p>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--habit-soft: #e6eef6">
+            <span class="stat-card__icon" aria-hidden="true">📖</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <p class="stat-card__name">Чтение</p>
+                <span class="stat-card__pct">65%</span>
+              </div>
+              <p class="stat-card__meta">Серия 21 · лучшая 21</p>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--habit-soft: #ece8f4">
+            <span class="stat-card__icon" aria-hidden="true">🧘</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <p class="stat-card__name">Медитация</p>
+                <span class="stat-card__pct">72%</span>
+              </div>
+              <p class="stat-card__meta">Серия 7 · лучшая 14</p>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--habit-soft: #e1f0ee">
+            <span class="stat-card__icon" aria-hidden="true">🚶</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <p class="stat-card__name">Прогулка на свежем воздухе</p>
+                <span class="stat-card__pct">12%</span>
+              </div>
+              <p class="stat-card__meta">Серия 0 · лучшая 3</p>
+            </div>
+          </article>
+        </div>
+      </main>
+
+      <nav class="tabbar" aria-label="Основная навигация">
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-today" /></svg>
+          <span>Сегодня</span>
+        </a>
+        <a class="tab is-active" href="#">
+          <svg class="icon"><use href="#i-chart" /></svg>
+          <span>Статистика</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-settings" /></svg>
+          <span>Настройки</span>
+        </a>
+      </nav>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

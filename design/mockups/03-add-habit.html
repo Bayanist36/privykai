@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Новая привычка</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <header class="appbar">
+        <button class="iconbtn" aria-label="Назад">
+          <svg class="icon"><use href="#i-back" /></svg>
+        </button>
+        <h1 class="appbar__title">Новая привычка</h1>
+      </header>
+
+      <div class="screen-scroll">
+        <div class="form-section" style="margin-top: 4px">
+          <label class="field__label" for="habit-name">Название</label>
+          <div class="field__box is-focused">
+            <span class="field__value" id="habit-name">Пить воду</span><span class="caret"></span>
+          </div>
+          <p class="field__counter">9/40</p>
+        </div>
+
+        <div class="form-section">
+          <div class="form-label">
+            <span>Иконка</span>
+            <span style="font-weight: 600; color: var(--text-primary)">Вода</span>
+          </div>
+          <div class="emoji-grid" role="radiogroup" aria-label="Иконка привычки">
+            <button class="emoji-option is-selected" role="radio" aria-checked="true" aria-label="Вода">💧</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Бег">🏃</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Тренировка">💪</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Чтение">📖</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Сон">😴</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Медитация">🧘</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Прогулка">🚶</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Питание">🥗</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Зубы">🦷</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Утро">☀️</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Витамины">💊</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Дневник">✍️</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Музыка">🎸</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Уборка">🧹</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Отказ от привычки">🚭</button>
+            <button class="emoji-option" role="radio" aria-checked="false" aria-label="Другое">🌱</button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-label">
+            <span>Цвет</span>
+            <span style="font-weight: 600; color: var(--text-primary)">Зелёный</span>
+          </div>
+          <div class="color-row" role="radiogroup" aria-label="Цвет привычки">
+            <button class="color-swatch is-selected" role="radio" aria-checked="true" aria-label="Зелёный" style="background: #2a7052"></button>
+            <button class="color-swatch" role="radio" aria-checked="false" aria-label="Синий" style="background: #3c6e9f"></button>
+            <button class="color-swatch" role="radio" aria-checked="false" aria-label="Янтарный" style="background: #b87120"></button>
+            <button class="color-swatch" role="radio" aria-checked="false" aria-label="Коралловый" style="background: #b45a4a"></button>
+            <button class="color-swatch" role="radio" aria-checked="false" aria-label="Фиолетовый" style="background: #6b5b95"></button>
+            <button class="color-swatch" role="radio" aria-checked="false" aria-label="Бирюзовый" style="background: #2f7c77"></button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-label">
+            <span>Повторение</span>
+            <span style="font-weight: 600; color: var(--text-primary)">Каждый день</span>
+          </div>
+          <div class="weekdays" role="group" aria-label="Дни недели">
+            <button class="weekday is-on" aria-pressed="true">Пн</button>
+            <button class="weekday is-on" aria-pressed="true">Вт</button>
+            <button class="weekday is-on" aria-pressed="true">Ср</button>
+            <button class="weekday is-on" aria-pressed="true">Чт</button>
+            <button class="weekday is-on" aria-pressed="true">Пт</button>
+            <button class="weekday is-on" aria-pressed="true">Сб</button>
+            <button class="weekday is-on" aria-pressed="true">Вс</button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="group">
+            <div class="setting-row">
+              <span class="setting-row__icon"><svg class="icon"><use href="#i-bell" /></svg></span>
+              <div class="setting-row__text">
+                <p class="setting-row__title">Напоминание</p>
+                <p class="setting-row__sub">В дни по расписанию</p>
+              </div>
+              <span class="setting-row__value" style="color: var(--c-green-700); font-weight: 600">08:00</span>
+              <span class="switch is-on" role="switch" aria-checked="true" aria-label="Напоминание"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button class="btn btn--primary btn--block">Сохранить</button>
+      </div>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

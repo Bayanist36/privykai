@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "product": "Трекер привычек Sukhanov labs",
+    "version": "1.0.0-mvp",
+    "platform": "Android (Flutter)",
+    "baseline": "360 x 800 dp",
+    "language": "ru",
+    "updated": "2026-10-23",
+    "scopeNote": "MVP scope follows SUK-3 brief: no onboarding, schedules are daily or selected weekdays."
+  },
+  "color": {
+    "neutral": {
+      "white": "#FFFFFF",
+      "sand25": "#FAF8F3",
+      "sand50": "#F4F1E9",
+      "sand100": "#EAE5DA",
+      "sand200": "#DCD5C6",
+      "sand300": "#C4BCAA",
+      "ink900": "#18201B",
+      "ink700": "#3C463F",
+      "ink500": "#6B756D",
+      "ink300": "#A9B0AA"
+    },
+    "brand": {
+      "green700": "#1F5C43",
+      "green600": "#2A7052",
+      "green500": "#3B8A68",
+      "green200": "#BFD9CB",
+      "green100": "#DCEBE1",
+      "green50": "#EDF4EF"
+    },
+    "support": {
+      "amber800": "#8A4F13",
+      "amber600": "#B87120",
+      "amber500": "#D98A2B",
+      "amber100": "#F8E9D2",
+      "red600": "#B23B32",
+      "red50": "#FBECEA"
+    },
+    "semantic": {
+      "bgApp": "#FAF8F3",
+      "bgSurface": "#FFFFFF",
+      "bgSubtle": "#F4F1E9",
+      "bgInverse": "#2A7052",
+      "textPrimary": "#18201B",
+      "textSecondary": "#6B756D",
+      "textTertiary": "#A9B0AA",
+      "textOnInverse": "#FFFFFF",
+      "borderSubtle": "#EAE5DA",
+      "borderStrong": "#DCD5C6",
+      "accent": "#2A7052",
+      "accentPressed": "#1F5C43",
+      "accentSoft": "#EDF4EF",
+      "streak": "#D98A2B",
+      "streakSoft": "#F8E9D2",
+      "danger": "#B23B32",
+      "dangerSoft": "#FBECEA"
+    },
+    "habit": {
+      "green": {
+        "base": "#2A7052",
+        "soft": "#E4EFE8"
+      },
+      "blue": {
+        "base": "#3C6E9F",
+        "soft": "#E6EEF6"
+      },
+      "amber": {
+        "base": "#B87120",
+        "soft": "#F8E9D2"
+      },
+      "coral": {
+        "base": "#B45A4A",
+        "soft": "#F7E4DF"
+      },
+      "violet": {
+        "base": "#6B5B95",
+        "soft": "#ECE8F4"
+      },
+      "teal": {
+        "base": "#2F7C77",
+        "soft": "#E1F0EE"
+      }
+    }
+  },
+  "spacing": {
+    "1": 4,
+    "2": 8,
+    "3": 12,
+    "4": 16,
+    "5": 20,
+    "6": 24,
+    "8": 32,
+    "10": 40,
+    "12": 48
+  },
+  "radius": {
+    "xs": 8,
+    "sm": 12,
+    "md": 16,
+    "lg": 20,
+    "xl": 24,
+    "pill": 999
+  },
+  "typography": {
+    "family": "Inter",
+    "fallback": [
+      "Roboto",
+      "system-ui"
+    ],
+    "weights": [
+      400,
+      500,
+      600,
+      700
+    ],
+    "styles": {
+      "display": {
+        "size": 40,
+        "lineHeight": 44,
+        "weight": 700,
+        "letterSpacing": -0.8
+      },
+      "h1": {
+        "size": 28,
+        "lineHeight": 34,
+        "weight": 700,
+        "letterSpacing": -0.6
+      },
+      "h2": {
+        "size": 20,
+        "lineHeight": 26,
+        "weight": 600,
+        "letterSpacing": -0.2
+      },
+      "h3": {
+        "size": 17,
+        "lineHeight": 24,
+        "weight": 600,
+        "letterSpacing": -0.1
+      },
+      "body": {
+        "size": 16,
+        "lineHeight": 24,
+        "weight": 400,
+        "letterSpacing": 0
+      },
+      "bodyStrong": {
+        "size": 16,
+        "lineHeight": 22,
+        "weight": 600,
+        "letterSpacing": -0.1
+      },
+      "bodySmall": {
+        "size": 14,
+        "lineHeight": 20,
+        "weight": 400,
+        "letterSpacing": 0
+      },
+      "label": {
+        "size": 13,
+        "lineHeight": 18,
+        "weight": 500,
+        "letterSpacing": 0.1
+      },
+      "caption": {
+        "size": 12,
+        "lineHeight": 16,
+        "weight": 400,
+        "letterSpacing": 0
+      },
+      "button": {
+        "size": 16,
+        "lineHeight": 20,
+        "weight": 600,
+        "letterSpacing": 0
+      },
+      "stat": {
+        "size": 36,
+        "lineHeight": 40,
+        "weight": 700,
+        "letterSpacing": -0.8
+      },
+      "tab": {
+        "size": 11,
+        "lineHeight": 14,
+        "weight": 500,
+        "letterSpacing": 0
+      }
+    }
+  },
+  "sizing": {
+    "screenHorizontalPadding": 20,
+    "screenTopPadding": 4,
+    "cardPadding": 16,
+    "cardGap": 10,
+    "sectionGap": 24,
+    "touchTarget": 48,
+    "buttonHeight": 52,
+    "buttonRadius": 16,
+    "inputHeight": 56,
+    "habitCardMinHeight": 72,
+    "tabbarHeight": 76,
+    "fabSize": 56,
+    "fabRadius": 18,
+    "contentMaxWidth": 560,
+    "iconSize": 24,
+    "iconStroke": 1.8,
+    "appIconStore": 512,
+    "storeScreenshot": [
+      1080,
+      1920
+    ],
+    "habitIcon": 40,
+    "habitCheckIndicator": 28,
+    "emojiTileHeight": 52,
+    "weekdayChip": 40,
+    "emojiCount": 16,
+    "habitColorCount": 6
+  },
+  "elevation": {
+    "soft": "0 1px 2px rgba(24,32,27,0.04)",
+    "card": "0 8px 24px rgba(24,32,27,0.06)",
+    "float": "0 12px 32px rgba(24,32,27,0.16)",
+    "accentCard": "0 10px 24px rgba(31,92,67,0.18)"
+  },
+  "motion": {
+    "check": 220,
+    "pageTransition": 240,
+    "snackbarIn": 180,
+    "snackbarOut": 160,
+    "sheet": 260,
+    "press": 120,
+    "curveStandard": "easeOutCubic",
+    "curveEmphasized": "easeInOutCubic",
+    "reducedMotion": "disable transitions when MediaQuery.disableAnimations is true"
+  }
+}

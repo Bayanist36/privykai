@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Keep the notification icon through resource shrinking. It is referenced
+     only by name from Dart (AndroidInitializationSettings('ic_notification')),
+     so the shrinker cannot see a static reference and would drop it from the
+     release APK (BUG-02). -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification" />

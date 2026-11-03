@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Онбординг — шаг 3</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <div class="onboarding">
+        <div class="onboarding__top">
+          <button class="skip">Пропустить</button>
+        </div>
+
+        <div class="onboarding__art">
+          <div class="art">
+            <div class="art__blob art__blob--1"></div>
+            <div class="art__blob art__blob--2"></div>
+
+            <div class="notif-card">
+              <div class="notif-card__head">
+                <span class="notif-card__app"><svg class="icon"><use href="#i-check" /></svg></span>
+                <span>Привычки · сейчас</span>
+              </div>
+              <p class="notif-card__title">Пить воду</p>
+              <p class="notif-card__text">Отметьте привычку, когда будет удобно.</p>
+            </div>
+
+            <div class="bell-badge">
+              <svg class="icon"><use href="#i-bell" /></svg>
+            </div>
+
+            <div class="float-card float-card--time">
+              <b>08:00</b>
+              <span>каждый день</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding__copy">
+          <div class="dots-indicator"><i></i><i></i><i class="is-active"></i></div>
+          <h1 class="onboarding__title">Напоминания вовремя</h1>
+          <p class="onboarding__text">
+            Одно мягкое уведомление в выбранное время — без давления и лишних сообщений.
+          </p>
+        </div>
+
+        <div class="onboarding__footer">
+          <button class="btn btn--primary btn--block">Начать</button>
+          <p class="onboarding__hint">Первую привычку добавим вместе</p>
+        </div>
+      </div>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

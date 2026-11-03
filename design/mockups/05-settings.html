@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Настройки</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--scroll body--tabbar">
+        <header class="screen-head">
+          <h1 class="screen-head__title">Настройки</h1>
+        </header>
+
+        <div class="privacy-banner" style="margin-top: 16px">
+          <svg class="icon"><use href="#i-shield" /></svg>
+          <span>Данные хранятся только на этом устройстве</span>
+        </div>
+
+        <p class="group-label">Напоминания</p>
+        <div class="group">
+          <div class="setting-row">
+            <span class="setting-row__icon"><svg class="icon"><use href="#i-bell" /></svg></span>
+            <div class="setting-row__text">
+              <p class="setting-row__title">Напоминания</p>
+              <p class="setting-row__sub">Одно уведомление в день</p>
+            </div>
+            <span class="switch is-on" role="switch" aria-checked="true" aria-label="Напоминания"></span>
+          </div>
+          <div class="setting-row">
+            <span class="setting-row__icon"><svg class="icon"><use href="#i-clock" /></svg></span>
+            <div class="setting-row__text">
+              <p class="setting-row__title">Время по умолчанию</p>
+              <p class="setting-row__sub">Для новых привычек</p>
+            </div>
+            <span class="setting-row__value">08:00</span>
+          </div>
+        </div>
+
+        <p class="group-label">Данные</p>
+        <div class="group">
+          <div class="setting-row setting-row--danger">
+            <span class="setting-row__icon"><svg class="icon"><use href="#i-trash" /></svg></span>
+            <div class="setting-row__text">
+              <p class="setting-row__title">Сбросить все данные</p>
+              <p class="setting-row__sub">Привычки и история исчезнут с телефона</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="group-label">О приложении</p>
+        <div class="group">
+          <div class="setting-row">
+            <div class="setting-row__text">
+              <p class="setting-row__title">Версия</p>
+            </div>
+            <span class="setting-row__value">1.0.0</span>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row__text">
+              <p class="setting-row__title">Политика конфиденциальности</p>
+            </div>
+            <svg class="icon icon--md" style="color: var(--text-tertiary)"><use href="#i-chevron-right" /></svg>
+          </div>
+        </div>
+
+        <p class="app-footnote">Sukhanov labs · 2026</p>
+      </main>
+
+      <nav class="tabbar" aria-label="Основная навигация">
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-today" /></svg>
+          <span>Сегодня</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-chart" /></svg>
+          <span>Статистика</span>
+        </a>
+        <a class="tab is-active" href="#">
+          <svg class="icon"><use href="#i-settings" /></svg>
+          <span>Настройки</span>
+        </a>
+      </nav>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

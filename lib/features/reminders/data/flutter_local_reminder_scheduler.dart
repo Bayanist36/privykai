@@ -1,0 +1,255 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
+
+import 'package:habit_tracker/features/habits/domain/models/habit.dart';
+import 'package:habit_tracker/features/reminders/domain/local_time_zone.dart';
+import 'package:habit_tracker/features/reminders/domain/reminder_plan.dart';
+import 'package:habit_tracker/features/reminders/domain/reminder_scheduler.dart';
+
+/// Android implementation backed by `flutter_local_notifications`.
+///
+/// One recurring notification is scheduled per selected weekday with
+/// `DateTimeComponents.dayOfWeekAndTime` and an inexact alarm (±15 minutes),
+/// so the app does not need `SCHEDULE_EXACT_ALARM`.
+class FlutterLocalReminderScheduler implements ReminderScheduler {
+  FlutterLocalReminderScheduler({FlutterLocalNotificationsPlugin? plugin})
+    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+
+  static const String channelId = 'habit_reminders';
+  static const String channelName = 'Напоминания о привычках';
+  static const String channelDescription =
+      'Напоминания по расписанию привычки: один раз в день или через '
+      'выбранный интервал.';
+
+  static const String eveningChannelId = 'evening_check';
+  static const String eveningChannelName = 'Вечерняя проверка';
+  static const String eveningChannelDescription =
+      'Одно напоминание вечером проверить, всё ли отмечено.';
+
+  /// Payload of the evening reminder so the app can route it if needed.
+  static const String eveningPayload = 'evening_check';
+
+  final FlutterLocalNotificationsPlugin _plugin;
+  bool _initialized = false;
+
+  @override
+  Future<void> initialize() async {
+    if (_initialized) {
+      return;
+    }
+
+    tz_data.initializeTimeZones();
+    await _configureLocalTimeZone();
+
+    const settings = InitializationSettings(
+      android: AndroidInitializationSettings('ic_notification'),
+    );
+
+    try {
+      await _plugin.initialize(settings: settings);
+
+      final android = _android;
+      if (android != null) {
+        const channel = AndroidNotificationChannel(
+          channelId,
+          channelName,
+          description: channelDescription,
+          importance: Importance.defaultImportance,
+          playSound: true,
+          enableVibration: true,
+        );
+        await android.createNotificationChannel(channel);
+
+        const eveningChannel = AndroidNotificationChannel(
+          eveningChannelId,
+          eveningChannelName,
+          description: eveningChannelDescription,
+          importance: Importance.defaultImportance,
+          playSound: true,
+          enableVibration: true,
+        );
+        await android.createNotificationChannel(eveningChannel);
+      }
+
+      _initialized = true;
+    } catch (error, stackTrace) {
+      // A broken release resource (BUG-02) or a platform error must surface
+      // to the caller instead of turning the reminder switch into a no-op.
+      debugPrint('Reminder plugin initialization failed: $error');
+      Error.throwWithStackTrace(error, stackTrace);
+    }
+  }
+
+  @override
+  Future<bool> areNotificationsEnabled() async {
+    await initialize();
+    final android = _android;
+    if (android == null) {
+      return false;
+    }
+    return await android.areNotificationsEnabled() ?? false;
+  }
+
+  @override
+  Future<bool> requestPermission() async {
+    await initialize();
+    final android = _android;
+    if (android == null) {
+      return false;
+    }
+    final granted = await android.requestNotificationsPermission();
+    if (granted != null) {
+      return granted;
+    }
+    return await android.areNotificationsEnabled() ?? true;
+  }
+
+  @override
+  Future<void> openNotificationSettings() async {
+    await initialize();
+    await _plugin.openAppNotificationSettings();
+  }
+
+  @override
+  Future<void> syncAll(
+    List<Habit> habits, {
+    bool enabled = true,
+    EveningReminder? evening,
+  }) async {
+    await initialize();
+    await _plugin.cancelAllPendingNotifications();
+
+    if (!enabled || !await areNotificationsEnabled()) {
+      return;
+    }
+
+    for (final habit in habits) {
+      if (habit.weekdaysMask == 0 || !habit.hasReminder) {
+        continue;
+      }
+      await _scheduleHabit(habit);
+    }
+
+    await _scheduleEvening(evening);
+  }
+
+  AndroidFlutterLocalNotificationsPlugin? get _android => _plugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >();
+
+  Future<void> _configureLocalTimeZone() async {
+    String? identifier;
+    try {
+      final timeZone = await FlutterTimezone.getLocalTimezone();
+      identifier = timeZone.identifier;
+    } catch (error) {
+      debugPrint('Could not read device timezone: $error');
+    }
+
+    final resolved = LocalTimeZone.resolveName(identifier);
+    if (resolved != null) {
+      tz.setLocalLocation(tz.getLocation(resolved));
+      return;
+    }
+
+    // Never fall back to UTC silently: use the device's current offset so a
+    // reminder set for 08:00 still fires at 08:00 local time (BUG-06).
+    final offset = DateTime.now().timeZoneOffset;
+    final fallback = LocalTimeZone.fixedOffset(offset);
+    tz.setLocalLocation(fallback);
+    debugPrint(
+      'Could not resolve timezone "$identifier"; using device offset '
+      '$offset (${fallback.name}).',
+    );
+  }
+
+  Future<void> _scheduleHabit(Habit habit) async {
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        channelId,
+        channelName,
+        channelDescription: channelDescription,
+        importance: Importance.defaultImportance,
+        priority: Priority.defaultPriority,
+        category: AndroidNotificationCategory.reminder,
+      ),
+    );
+
+    final plan = ReminderPlan.planFor(habit, now: DateTime.now());
+    for (final reminder in plan) {
+      await _schedule(
+        id: reminder.id,
+        dateTime: reminder.dateTime,
+        details: details,
+        title: habit.name,
+        body: habit.isIntervalReminder
+            ? 'Пора отметить привычку.'
+            : 'Отметьте привычку, когда будет удобно.',
+        payload: habit.id,
+      );
+    }
+  }
+
+  Future<void> _scheduleEvening(EveningReminder? evening) async {
+    final plan = ReminderPlan.eveningPlan(
+      evening: evening,
+      now: DateTime.now(),
+    );
+    if (plan.isEmpty) {
+      return;
+    }
+
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        eveningChannelId,
+        eveningChannelName,
+        channelDescription: eveningChannelDescription,
+        importance: Importance.defaultImportance,
+        priority: Priority.defaultPriority,
+        category: AndroidNotificationCategory.reminder,
+      ),
+    );
+
+    for (final reminder in plan) {
+      await _schedule(
+        id: reminder.id,
+        dateTime: reminder.dateTime,
+        details: details,
+        title: 'Как прошёл день?',
+        body: 'Отметьте выполненные привычки, пока не закончился день.',
+        payload: eveningPayload,
+      );
+    }
+  }
+
+  Future<void> _schedule({
+    required int id,
+    required DateTime dateTime,
+    required NotificationDetails details,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    await _plugin.zonedSchedule(
+      id: id,
+      scheduledDate: tz.TZDateTime(
+        tz.local,
+        dateTime.year,
+        dateTime.month,
+        dateTime.day,
+        dateTime.hour,
+        dateTime.minute,
+      ),
+      notificationDetails: details,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      title: title,
+      body: body,
+      payload: payload,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+    );
+  }
+}

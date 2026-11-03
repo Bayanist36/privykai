@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Удаление привычки</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--tabbar">
+        <header class="screen-head">
+          <p class="screen-head__eyebrow">Пятница, 23 октября</p>
+          <h1 class="screen-head__title">Сегодня</h1>
+        </header>
+
+        <section class="progress-card">
+          <div class="progress-card__top">
+            <div>
+              <p class="progress-card__label">Выполнено сегодня</p>
+              <p class="progress-card__count">3 <span>из 5</span></p>
+            </div>
+            <span class="progress-card__percent">60%</span>
+          </div>
+          <div class="progress-card__track"><i style="width: 60%"></i></div>
+          <p class="progress-card__note">Осталось 2 привычки</p>
+        </section>
+
+        <div class="section-head">
+          <h2 class="section-head__title">Привычки</h2>
+          <span class="section-head__meta">3 из 5</span>
+        </div>
+
+        <div class="habit-list">
+          <article class="habit is-done" style="--habit-soft: #e4efe8; --habit-color: #2a7052">
+            <span class="habit__icon" aria-hidden="true">💧</span>
+            <div class="habit__text">
+              <h3 class="habit__name">Вода</h3>
+              <p class="habit__meta"><svg class="icon"><use href="#i-flame" /></svg>12 дней подряд</p>
+            </div>
+            <span class="habit__check"><svg class="icon"><use href="#i-check" /></svg></span>
+          </article>
+
+          <article class="habit" style="--habit-soft: #e6eef6; --habit-color: #3c6e9f">
+            <span class="habit__icon" aria-hidden="true">📖</span>
+            <div class="habit__text">
+              <h3 class="habit__name">Чтение</h3>
+              <p class="habit__meta"><svg class="icon"><use href="#i-flame" /></svg>21 день подряд</p>
+            </div>
+            <span class="habit__check"><svg class="icon"><use href="#i-check" /></svg></span>
+          </article>
+        </div>
+      </main>
+
+      <div class="screen-dim"></div>
+      <div class="dialog-wrap">
+        <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="del-habit">
+          <h2 class="dialog__title" id="del-habit">Удалить «Чтение»?</h2>
+          <p class="dialog__body">
+            История и серия будут удалены безвозвратно. Остальные привычки не изменятся.
+          </p>
+          <div class="dialog__actions">
+            <button class="btn btn--secondary">Отмена</button>
+            <button class="btn btn--destructive">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

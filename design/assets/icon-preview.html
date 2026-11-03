@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Иконка приложения — концепты</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <style>
+      html,
+      body {
+        height: auto;
+        overflow: auto;
+      }
+      body {
+        padding: 48px;
+        background: var(--bg-app);
+      }
+      h1 {
+        font: var(--t-h1);
+        letter-spacing: -0.6px;
+        margin-bottom: 8px;
+      }
+      .lead {
+        font: var(--t-body-s);
+        color: var(--text-secondary);
+        max-width: 720px;
+        margin-bottom: 36px;
+      }
+      .concepts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        max-width: 1080px;
+      }
+      .concept {
+        background: #fff;
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 24px;
+      }
+      .concept__art {
+        display: flex;
+        gap: 16px;
+        align-items: flex-end;
+        margin-bottom: 18px;
+      }
+      .concept__art img {
+        border-radius: 22%;
+        display: block;
+      }
+      .concept h2 {
+        font: var(--t-h3);
+      }
+      .concept p {
+        font: var(--t-body-s);
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+      .sizes {
+        display: flex;
+        align-items: flex-end;
+        gap: 16px;
+        margin-top: 24px;
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--c-sand-50);
+      }
+      .sizes img {
+        border-radius: 22%;
+      }
+      .dark {
+        background: #18201b;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      .dark span {
+        font: var(--t-caption);
+        color: #a9b0aa;
+      }
+      .caption {
+        font: var(--t-caption);
+        color: var(--text-tertiary);
+        margin-left: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Иконка приложения</h1>
+    <p class="lead">
+      Основной концепт — «кольцо прогресса и галочка». Знак читается на 48 и 32 px, не зависит от
+      названия продукта и работает на светлой и тёмной подложке. Ниже — два альтернативных
+      направления.
+    </p>
+
+    <div class="concepts">
+      <div class="concept">
+        <div class="concept__art">
+          <img src="app-icon.svg" width="160" height="160" alt="Основная иконка" />
+          <img src="app-icon.svg" width="72" height="72" alt="" />
+        </div>
+        <h2>A · Кольцо и галочка</h2>
+        <p>Основной. Прогресс, который видно с первого взгляда. Тёплый фон отличает от синих конкурентов.</p>
+      </div>
+      <div class="concept">
+        <div class="concept__art">
+          <img src="app-icon-alt-a.svg" width="160" height="160" alt="Концепт B" />
+          <img src="app-icon-alt-a.svg" width="72" height="72" alt="" />
+        </div>
+        <h2>B · Список привычек</h2>
+        <p>Три строки и галочка. Прямее говорит о продукте, но ближе к массовым to-do приложениям.</p>
+      </div>
+      <div class="concept">
+        <div class="concept__art">
+          <img src="app-icon-alt-b.svg" width="160" height="160" alt="Концепт C" />
+          <img src="app-icon-alt-b.svg" width="72" height="72" alt="" />
+        </div>
+        <h2>C · Галочка на зелёном</h2>
+        <p>Максимально заметная в каталоге, но менее «спокойная» и не показывает прогресс.</p>
+      </div>
+    </div>
+
+    <div class="sizes">
+      <img src="app-icon.svg" width="128" height="128" alt="" />
+      <img src="app-icon.svg" width="96" height="96" alt="" />
+      <img src="app-icon.svg" width="72" height="72" alt="" />
+      <img src="app-icon.svg" width="48" height="48" alt="" />
+      <img src="app-icon.svg" width="32" height="32" alt="" />
+      <span class="caption">128 · 96 · 72 · 48 · 32 px</span>
+    </div>
+
+    <div class="dark">
+      <img src="app-icon.svg" width="72" height="72" alt="" />
+      <img src="app-icon.svg" width="48" height="48" alt="" />
+      <span>Проверка на тёмном фоне: тёплая подложка сохраняет контраст.</span>
+    </div>
+  </body>
+</html>

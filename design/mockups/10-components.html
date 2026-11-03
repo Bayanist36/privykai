@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Компоненты и состояния — дизайн-система</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+    <style>
+      html,
+      body {
+        height: auto;
+        overflow: auto;
+      }
+      body {
+        background: var(--bg-app);
+        padding: 40px 0 80px;
+      }
+      .kit {
+        width: 1120px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .kit-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border-subtle);
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      .kit-head h1 {
+        font: 700 34px/40px var(--font);
+        letter-spacing: -0.8px;
+      }
+      .kit-head p {
+        font: var(--t-body-s);
+        color: var(--text-secondary);
+        margin-top: 6px;
+      }
+      .kit-tag {
+        font: 600 12px/16px var(--font);
+        color: var(--c-green-700);
+        background: var(--c-green-50);
+        border-radius: 999px;
+        padding: 6px 12px;
+      }
+      .kit-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+      .kit-block {
+        background: #fff;
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 20px;
+      }
+      .kit-block--wide {
+        grid-column: span 2;
+      }
+      .kit-label {
+        font: 600 12px/16px var(--font);
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: var(--text-tertiary);
+        margin-bottom: 16px;
+      }
+      .kit-caption {
+        font: var(--t-caption);
+        color: var(--text-secondary);
+        margin-top: 10px;
+      }
+      .demo-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+      }
+      .demo-col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .demo-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 320px;
+      }
+      .demo-note {
+        font: 600 11px/14px var(--font);
+        color: var(--text-tertiary);
+        margin-bottom: 6px;
+      }
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+      }
+      .swatch__chip {
+        height: 56px;
+        border-radius: 12px;
+        border: 1px solid rgba(24, 32, 27, 0.06);
+      }
+      .swatch b {
+        display: block;
+        font: 600 12px/16px var(--font);
+        margin-top: 8px;
+      }
+      .swatch span {
+        font: 11px/14px var(--font);
+        color: var(--text-secondary);
+      }
+      .type-row {
+        display: flex;
+        align-items: baseline;
+        gap: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .type-row:last-child {
+        border-bottom: 0;
+      }
+      .type-row code {
+        width: 150px;
+        font: 11px/14px ui-monospace, monospace;
+        color: var(--text-tertiary);
+        flex: none;
+      }
+      .icon-set {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 10px;
+      }
+      .icon-set div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 12px 4px;
+        border-radius: 12px;
+        background: var(--c-sand-25);
+        font: 10px/13px var(--font);
+        color: var(--text-secondary);
+        text-align: center;
+      }
+      .icon-set .icon {
+        color: var(--text-primary);
+      }
+      .emoji-set {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 8px;
+      }
+      .emoji-set div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 10px 4px;
+        border-radius: 12px;
+        background: var(--c-sand-25);
+        font: 10px/13px var(--font);
+        color: var(--text-secondary);
+        text-align: center;
+      }
+      .emoji-set b {
+        font: 20px/24px var(--font);
+      }
+      .sheet--inline {
+        position: relative;
+        border-radius: 20px;
+        box-shadow: none;
+        border: 1px solid var(--border-subtle);
+        max-width: 360px;
+      }
+      .empty--inline {
+        width: 320px;
+        padding: 0;
+      }
+      .state-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font: 500 12px/16px var(--font);
+        color: var(--text-secondary);
+        background: var(--c-sand-50);
+        padding: 6px 10px;
+        border-radius: 8px;
+      }
+      .ring-demo {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-top: 20px;
+      }
+      .ring-demo svg {
+        width: 88px;
+        height: 88px;
+      }
+      .dialog-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .dialog--flat {
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid var(--border-subtle);
+      }
+      .color-palette {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .color-palette div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        font: 11px/14px var(--font);
+        color: var(--text-secondary);
+      }
+      .color-palette i {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kit">
+      <header class="kit-head">
+        <div>
+          <h1>Компоненты и состояния</h1>
+          <p>
+            Дизайн-система трекера привычек. Базовый экран 360 × 800 dp, сетка 4 pt, шрифт Inter.
+            Токены — в <code>tokens/design-tokens.json</code>.
+          </p>
+        </div>
+        <span class="kit-tag">MVP · v1.0</span>
+      </header>
+
+      <div class="kit-grid">
+        <section class="kit-block kit-block--wide">
+          <p class="kit-label">Color tokens</p>
+          <div class="swatches">
+            <div class="swatch"><div class="swatch__chip" style="background: #faf8f3"></div><b>bg-app</b><span>#FAF8F3</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #ffffff"></div><b>surface</b><span>#FFFFFF</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #eae5da"></div><b>border-subtle</b><span>#EAE5DA</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #18201b"></div><b>text-primary</b><span>#18201B</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #6b756d"></div><b>text-secondary</b><span>#6B756D</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #2a7052"></div><b>accent</b><span>#2A7052</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #1f5c43"></div><b>accent-pressed</b><span>#1F5C43</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #edf4ef"></div><b>accent-soft</b><span>#EDF4EF</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #d98a2b"></div><b>streak</b><span>#D98A2B</span></div>
+            <div class="swatch"><div class="swatch__chip" style="background: #f8e9d2"></div><b>streak-soft</b><span>#F8E9D2</span></div>
+          </div>
+          <p class="kit-caption">
+            Danger #B23B32 · Danger soft #FBECEA · Disabled text #A9B0AA. Тёмная тема — P1, не входит
+            в текущую итерацию.
+          </p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">Typography / Inter</p>
+          <div class="type-row"><code>display 40/44 · 700</code><span class="t-display">12 дней</span></div>
+          <div class="type-row"><code>h1 28/34 · 700</code><span class="t-h1">Сегодня</span></div>
+          <div class="type-row"><code>h2 20/26 · 600</code><span class="t-h2">Пока нет привычек</span></div>
+          <div class="type-row"><code>h3 17/24 · 600</code><span class="t-h3">Новая привычка</span></div>
+          <div class="type-row"><code>body 16/24 · 400</code><span class="t-body">Привычки хранятся на телефоне</span></div>
+          <div class="type-row"><code>body-s 14/20 · 400</code><span class="t-body-s">21 из 23 дней · 91%</span></div>
+          <div class="type-row"><code>label 13/18 · 500</code><span class="t-label">Выполнено сегодня</span></div>
+          <div class="type-row"><code>caption 12/16 · 400</code><span class="t-caption">Осталось 2 привычки</span></div>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">PrimaryButton</p>
+          <div class="demo-col">
+            <div><p class="demo-note">enabled</p><button class="btn btn--primary" style="width: 200px">Сохранить</button></div>
+            <div><p class="demo-note">pressed (#1F5C43, scale .985)</p><button class="btn btn--primary" style="width: 200px; background: var(--c-green-700)">Сохранить</button></div>
+            <div><p class="demo-note">disabled</p><button class="btn btn--primary is-disabled" style="width: 200px">Сохранить</button></div>
+            <div><p class="demo-note">loading</p><button class="btn btn--primary is-loading" style="width: 200px"><span class="spinner"></span><span class="btn__label">Сохранить</span></button></div>
+          </div>
+          <p class="kit-caption">Height 52 · radius 16 · horizontal padding 20 · text 16/600.</p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">Secondary / ghost / danger</p>
+          <div class="demo-row">
+            <button class="btn btn--secondary">Отмена</button>
+            <button class="btn btn--ghost">Пропустить</button>
+          </div>
+          <div class="demo-row" style="margin-top: 16px">
+            <button class="btn btn--destructive" style="height: 44px">Удалить</button>
+            <button class="btn btn--danger-text">Сбросить все данные</button>
+          </div>
+          <p class="kit-caption">Ghost: 44 height, accent text. Destructive: red-50 bg, red text.</p>
+          <p class="kit-caption">Прогресс дня — в компоненте ProgressCard.</p>
+        </section>
+        </section>
+
+        <section class="kit-block kit-block--wide">
+          <p class="kit-label">HabitTile</p>
+          <div class="demo-row" style="align-items: flex-start">
+            <div class="demo-stack">
+              <p class="demo-note">unchecked</p>
+              <article class="habit" style="--habit-soft: #e4efe8; --habit-color: #2a7052">
+                <span class="habit__icon">💧</span>
+                <div class="habit__text">
+                  <h3 class="habit__name">Вода</h3>
+                  <p class="habit__meta"><svg class="icon"><use href="#i-flame" /></svg>12 дней подряд</p>
+                </div>
+                <span class="habit__check"><svg class="icon"><use href="#i-check" /></svg></span>
+              </article>
+              <p class="demo-note">checked</p>
+              <article class="habit is-done" style="--habit-soft: #e6eef6; --habit-color: #3c6e9f">
+                <span class="habit__icon">📖</span>
+                <div class="habit__text">
+                  <h3 class="habit__name">Чтение</h3>
+                  <p class="habit__meta"><svg class="icon"><use href="#i-flame" /></svg>21 день подряд</p>
+                </div>
+                <span class="habit__check"><svg class="icon"><use href="#i-check" /></svg></span>
+              </article>
+            </div>
+            <div class="demo-stack">
+              <p class="demo-note">long name (2 lines)</p>
+              <article class="habit" style="--habit-soft: #e1f0ee; --habit-color: #2f7c77">
+                <span class="habit__icon">🚶</span>
+                <div class="habit__text">
+                  <h3 class="habit__name">Прогулка на свежем воздухе</h3>
+                  <p class="habit__meta habit__meta--muted"><svg class="icon"><use href="#i-flame" /></svg>Серия начнётся сегодня</p>
+                </div>
+                <span class="habit__check"><svg class="icon"><use href="#i-check" /></svg></span>
+              </article>
+              <p class="demo-note">card geometry</p>
+              <div class="state-note">min-height 72 · padding 12/14 · gap 12 · radius 16</div>
+              <div class="state-note">tap anywhere = toggle · long press = actions</div>
+              <div class="state-note">checked: accent-soft bg, check in habit color</div>
+            </div>
+            <div class="demo-stack">
+              <p class="demo-note">Habit palette / 6 цветов</p>
+              <div class="color-palette">
+                <div><i style="background: #2a7052"></i>Зелёный</div>
+                <div><i style="background: #3c6e9f"></i>Синий</div>
+                <div><i style="background: #b87120"></i>Янтарный</div>
+              </div>
+              <div class="color-palette" style="margin-top: 8px">
+                <div><i style="background: #b45a4a"></i>Коралловый</div>
+                <div><i style="background: #6b5b95"></i>Фиолетовый</div>
+                <div><i style="background: #2f7c77"></i>Бирюзовый</div>
+              </div>
+              <div class="state-note" style="margin-top: 8px">soft-фон = 12 % базового цвета</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">EmojiPicker / 16 вариантов</p>
+          <div class="emoji-grid" style="width: 320px">
+            <button class="emoji-option is-selected">💧</button>
+            <button class="emoji-option">🏃</button>
+            <button class="emoji-option">💪</button>
+            <button class="emoji-option">📖</button>
+            <button class="emoji-option">😴</button>
+            <button class="emoji-option">🧘</button>
+            <button class="emoji-option">🚶</button>
+            <button class="emoji-option">🥗</button>
+            <button class="emoji-option">🦷</button>
+            <button class="emoji-option">☀️</button>
+            <button class="emoji-option">💊</button>
+            <button class="emoji-option">✍️</button>
+            <button class="emoji-option">🎸</button>
+            <button class="emoji-option">🧹</button>
+            <button class="emoji-option">🚭</button>
+            <button class="emoji-option">🌱</button>
+          </div>
+          <p class="kit-caption">4 × 4 · tile 74 × 52 · emoji 24 · selected: green-50 + green-600 ring.</p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">RepeatDays / schedule</p>
+          <p class="demo-note">Каждый день (все 7)</p>
+          <div class="weekdays" style="margin-top: 0">
+            <button class="weekday is-on">Пн</button>
+            <button class="weekday is-on">Вт</button>
+            <button class="weekday is-on">Ср</button>
+            <button class="weekday is-on">Чт</button>
+            <button class="weekday is-on">Пт</button>
+            <button class="weekday is-on">Сб</button>
+            <button class="weekday is-on">Вс</button>
+          </div>
+          <p class="demo-note" style="margin-top: 16px">Выбранные дни (Пн · Ср · Пт)</p>
+          <div class="weekdays" style="margin-top: 0">
+            <button class="weekday is-on">Пн</button>
+            <button class="weekday">Вт</button>
+            <button class="weekday is-on">Ср</button>
+            <button class="weekday">Чт</button>
+            <button class="weekday is-on">Пт</button>
+            <button class="weekday">Сб</button>
+            <button class="weekday">Вс</button>
+          </div>
+          <p class="kit-caption">40 × 40 · минимум один день; все 7 = «Каждый день».</p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">ProgressCard / Прогресс дня</p>
+          <div class="progress-card" style="margin-top: 0">
+            <div class="progress-card__top">
+              <div>
+                <p class="progress-card__label">Выполнено сегодня</p>
+                <p class="progress-card__count">3 <span>из 5</span></p>
+              </div>
+              <span class="progress-card__percent">60%</span>
+            </div>
+            <div class="progress-card__track"><i style="width: 60%"></i></div>
+            <p class="progress-card__note">Осталось 2 привычки</p>
+          </div>
+          <div class="ring-demo">
+            <svg viewBox="0 0 88 88" fill="none">
+              <circle cx="44" cy="44" r="38" stroke="#eae5da" stroke-width="8" />
+              <circle cx="44" cy="44" r="38" stroke="#2a7052" stroke-width="8" stroke-linecap="round" stroke-dasharray="150 239" transform="rotate(-90 44 44)" />
+            </svg>
+            <div>
+              <p class="demo-note">ProgressRing</p>
+              <p class="kit-caption" style="margin-top: 2px">stroke 8 · track sand-100 · 60%</p>
+              <p class="kit-caption" style="margin-top: 2px">только в онбординге (P2)</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">TextField</p>
+          <div class="demo-col">
+            <div><p class="demo-note">default</p><div class="field__box"><span class="field__placeholder">Например, пить воду</span></div></div>
+            <div><p class="demo-note">focused</p><div class="field__box is-focused"><span class="field__value">Пить воду</span><span class="caret"></span></div></div>
+            <div><p class="demo-note">error</p><div class="field__box is-error"><span class="field__value">П</span></div><p class="field__hint field__hint--error">Название должно быть от 1 до 40 символов</p></div>
+            <div><p class="demo-note">disabled</p><div class="field__box field__box--disabled"><span class="field__placeholder">Недоступно</span></div></div>
+          </div>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">Switch / badges</p>
+          <div class="demo-row"><span class="switch"></span><span class="switch is-on"></span></div>
+          <p class="kit-caption">Switch 48×28 · thumb 22. Нажатие — 160 мс.</p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">Loading skeleton</p>
+          <div class="sk-habit" style="margin-bottom: 10px">
+            <div class="sk-circle skeleton"></div>
+            <div class="sk-habit__text">
+              <div class="skeleton" style="width: 58%; height: 16px"></div>
+              <div class="skeleton" style="width: 38%; height: 12px"></div>
+            </div>
+          </div>
+          <div class="sk-habit">
+            <div class="sk-circle skeleton"></div>
+            <div class="sk-habit__text">
+              <div class="skeleton" style="width: 46%; height: 16px"></div>
+              <div class="skeleton" style="width: 30%; height: 12px"></div>
+            </div>
+          </div>
+          <p class="kit-caption">Показывать, если чтение из хранилища дольше 150 мс. Пульсация 1.4 с.</p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">EmptyState</p>
+          <div class="empty empty--inline">
+            <div class="empty__art" style="width: 110px; height: 110px; margin: 0 0 12px">
+              <svg class="icon" style="width: 36px; height: 36px"><use href="#i-leaf" /></svg>
+            </div>
+            <h2 class="empty__title" style="font-size: 18px; line-height: 24px">Пока нет привычек</h2>
+            <p class="empty__text" style="margin-top: 6px">Добавьте первую — и отмечайте её одним тапом.</p>
+            <div class="empty__examples" style="margin-top: 12px">
+              <button class="example"><span class="example__emoji">💧</span>Пить воду<svg class="icon"><use href="#i-chevron-right" /></svg></button>
+              <button class="example"><span class="example__emoji">📖</span>Читать 20 минут<svg class="icon"><use href="#i-chevron-right" /></svg></button>
+            </div>
+            <button class="btn btn--primary empty__cta" style="margin-top: 14px">
+              <svg class="icon icon--md"><use href="#i-plus" /></svg>Добавить привычку
+            </button>
+            <p class="empty__privacy"><svg class="icon"><use href="#i-shield" /></svg>Данные хранятся только на телефоне</p>
+          </div>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">Snackbar / completion + undo</p>
+          <div class="snackbar">
+            <span>Выполнено. Серия: 13</span>
+            <button class="snackbar__action">Отменить</button>
+          </div>
+          <p class="kit-caption">5 секунд над FAB (bottom 160). Без undo — «Отметка снята».</p>
+        </section>
+
+        <section class="kit-block">
+          <p class="kit-label">BottomSheet / действия</p>
+          <div class="sheet sheet--inline">
+            <div class="sheet__handle"></div>
+            <p class="sheet__title">Чтение</p>
+            <button class="sheet__item"><svg class="icon"><use href="#i-edit" /></svg>Редактировать</button>
+            <button class="sheet__item sheet__item--danger"><svg class="icon"><use href="#i-trash" /></svg>Удалить привычку</button>
+          </div>
+          <p class="kit-caption">Radius 24 сверху · handle 36×4 · итемы 52.</p>
+        </section>
+
+        <section class="kit-block kit-block--wide">
+          <p class="kit-label">Dialogs / destructive</p>
+          <div class="dialog-grid">
+            <div class="dialog dialog--flat">
+              <h2 class="dialog__title">Удалить «Чтение»?</h2>
+              <p class="dialog__body">История и серия будут удалены безвозвратно. Остальные привычки не изменятся.</p>
+              <div class="dialog__actions">
+                <button class="btn btn--secondary">Отмена</button>
+                <button class="btn btn--destructive">Удалить</button>
+              </div>
+            </div>
+            <div class="dialog dialog--flat">
+              <h2 class="dialog__title">Сбросить все данные?</h2>
+              <p class="dialog__body">Все привычки, серии и статистика удалятся с телефона. Это второй шаг подтверждения.</p>
+              <div class="dialog__actions">
+                <button class="btn btn--secondary">Отмена</button>
+                <button class="btn btn--destructive">Сбросить навсегда</button>
+              </div>
+            </div>
+          </div>
+          <p class="kit-caption">Удаление привычки — один диалог. Сброс всех данных — два последовательных диалога.</p>
+        </section>
+
+        <section class="kit-block kit-block--wide">
+          <p class="kit-label">Emoji set / 16</p>
+          <div class="emoji-set">
+            <div><b>💧</b>Вода</div><div><b>🏃</b>Бег</div><div><b>💪</b>Тренировка</div><div><b>📖</b>Чтение</div>
+            <div><b>😴</b>Сон</div><div><b>🧘</b>Медитация</div><div><b>🚶</b>Прогулка</div><div><b>🥗</b>Питание</div>
+            <div><b>🦷</b>Зубы</div><div><b>☀️</b>Утро</div><div><b>💊</b>Витамины</div><div><b>✍️</b>Дневник</div>
+            <div><b>🎸</b>Музыка</div><div><b>🧹</b>Уборка</div><div><b>🚭</b>Отказ</div><div><b>🌱</b>Другое</div>
+          </div>
+        </section>
+
+        <section class="kit-block kit-block--wide">
+          <p class="kit-label">Icon set / 24 px, stroke 1.8</p>
+          <div class="icon-set">
+            <div><svg class="icon"><use href="#i-today" /></svg>today</div>
+            <div><svg class="icon"><use href="#i-chart" /></svg>chart</div>
+            <div><svg class="icon"><use href="#i-settings" /></svg>settings</div>
+            <div><svg class="icon"><use href="#i-plus" /></svg>plus</div>
+            <div><svg class="icon"><use href="#i-check" /></svg>check</div>
+            <div><svg class="icon"><use href="#i-flame" /></svg>flame</div>
+            <div><svg class="icon"><use href="#i-bell" /></svg>bell</div>
+            <div><svg class="icon"><use href="#i-clock" /></svg>clock</div>
+            <div><svg class="icon"><use href="#i-trash" /></svg>trash</div>
+            <div><svg class="icon"><use href="#i-edit" /></svg>edit</div>
+            <div><svg class="icon"><use href="#i-lock" /></svg>lock</div>
+            <div><svg class="icon"><use href="#i-shield" /></svg>shield</div>
+            <div><svg class="icon"><use href="#i-wifi-off" /></svg>offline</div>
+            <div><svg class="icon"><use href="#i-calendar" /></svg>calendar</div>
+            <div><svg class="icon"><use href="#i-back" /></svg>back</div>
+            <div><svg class="icon"><use href="#i-chevron-right" /></svg>chevron</div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

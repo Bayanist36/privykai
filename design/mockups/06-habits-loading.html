@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Сегодня — загрузка</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--tabbar">
+        <header class="screen-head">
+          <p class="screen-head__eyebrow">Пятница, 23 октября</p>
+          <h1 class="screen-head__title">Сегодня</h1>
+        </header>
+
+        <div class="sk-progress skeleton"></div>
+
+        <div class="sk-section">
+          <div class="skeleton" style="width: 88px; height: 16px"></div>
+          <div class="skeleton" style="width: 40px; height: 12px"></div>
+        </div>
+
+        <div class="habit-list">
+          <div class="sk-habit">
+            <div class="sk-circle skeleton"></div>
+            <div class="sk-habit__text">
+              <div class="skeleton" style="width: 58%; height: 16px"></div>
+              <div class="skeleton" style="width: 38%; height: 12px"></div>
+            </div>
+            <div class="skeleton" style="width: 36px; height: 12px"></div>
+          </div>
+          <div class="sk-habit">
+            <div class="sk-circle skeleton"></div>
+            <div class="sk-habit__text">
+              <div class="skeleton" style="width: 46%; height: 16px"></div>
+              <div class="skeleton" style="width: 30%; height: 12px"></div>
+            </div>
+          </div>
+          <div class="sk-habit">
+            <div class="sk-circle skeleton"></div>
+            <div class="sk-habit__text">
+              <div class="skeleton" style="width: 66%; height: 16px"></div>
+              <div class="skeleton" style="width: 42%; height: 12px"></div>
+            </div>
+            <div class="skeleton" style="width: 36px; height: 12px"></div>
+          </div>
+          <div class="sk-habit">
+            <div class="sk-circle skeleton"></div>
+            <div class="sk-habit__text">
+              <div class="skeleton" style="width: 52%; height: 16px"></div>
+              <div class="skeleton" style="width: 34%; height: 12px"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <nav class="tabbar" aria-label="Основная навигация">
+        <a class="tab is-active" href="#">
+          <svg class="icon"><use href="#i-today" /></svg>
+          <span>Сегодня</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-chart" /></svg>
+          <span>Статистика</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-settings" /></svg>
+          <span>Настройки</span>
+        </a>
+      </nav>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

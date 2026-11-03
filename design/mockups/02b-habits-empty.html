@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Сегодня — пустое состояние</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--tabbar body--center">
+        <header class="screen-head">
+          <p class="screen-head__eyebrow">Пятница, 23 октября</p>
+          <h1 class="screen-head__title">Сегодня</h1>
+        </header>
+
+        <section class="empty empty--fill">
+          <div class="empty__art">
+            <svg class="icon"><use href="#i-leaf" /></svg>
+          </div>
+          <h2 class="empty__title">Пока нет привычек</h2>
+          <p class="empty__text">
+            Добавьте первую — и отмечайте её одним тапом. Это займёт полминуты.
+          </p>
+
+          <div class="empty__examples" aria-label="Примеры привычек">
+            <button class="example">
+              <span class="example__emoji" aria-hidden="true">💧</span>
+              Пить воду
+              <svg class="icon"><use href="#i-chevron-right" /></svg>
+            </button>
+            <button class="example">
+              <span class="example__emoji" aria-hidden="true">📖</span>
+              Читать 20 минут
+              <svg class="icon"><use href="#i-chevron-right" /></svg>
+            </button>
+            <button class="example">
+              <span class="example__emoji" aria-hidden="true">🚶</span>
+              Гулять 10 000 шагов
+              <svg class="icon"><use href="#i-chevron-right" /></svg>
+            </button>
+          </div>
+
+          <button class="btn btn--primary empty__cta">
+            <svg class="icon icon--md"><use href="#i-plus" /></svg>
+            Добавить привычку
+          </button>
+
+          <p class="empty__privacy">
+            <svg class="icon"><use href="#i-shield" /></svg>
+            Данные хранятся только на телефоне
+          </p>
+        </section>
+      </main>
+
+      <nav class="tabbar" aria-label="Основная навигация">
+        <a class="tab is-active" href="#">
+          <svg class="icon"><use href="#i-today" /></svg>
+          <span>Сегодня</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-chart" /></svg>
+          <span>Статистика</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-settings" /></svg>
+          <span>Настройки</span>
+        </a>
+      </nav>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

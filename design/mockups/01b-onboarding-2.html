@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Онбординг — шаг 2</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <div class="onboarding">
+        <div class="onboarding__top">
+          <button class="skip">Пропустить</button>
+        </div>
+
+        <div class="onboarding__art">
+          <div class="art">
+            <div class="art__blob art__blob--1"></div>
+            <div class="art__blob art__blob--2"></div>
+
+            <div class="art__shield">
+              <svg class="icon"><use href="#i-shield" /></svg>
+            </div>
+
+            <div class="float-card float-card--lock">
+              <svg class="icon"><use href="#i-lock" /></svg>
+              <span>Данные на устройстве</span>
+            </div>
+
+            <div class="offline-badge">
+              <svg class="icon"><use href="#i-wifi-off" /></svg>
+              Работает офлайн
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding__copy">
+          <div class="dots-indicator"><i></i><i class="is-active"></i><i></i></div>
+          <h1 class="onboarding__title">Работает<br />без интернета</h1>
+          <p class="onboarding__text">
+            Привычки хранятся только на вашем телефоне. Без аккаунта, рекламы и подписок.
+          </p>
+        </div>
+
+        <div class="onboarding__footer">
+          <button class="btn btn--primary btn--block">Далее</button>
+          <p class="onboarding__hint">Ничего не нужно настраивать</p>
+        </div>
+      </div>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

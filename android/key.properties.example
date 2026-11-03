@@ -1,0 +1,9 @@
+# Copy this file to android/key.properties (ignored by git) or run
+# scripts/generate_release_keystore.ps1, which writes it for you.
+#
+# storeFile may be absolute or relative to android/app. Keep the keystore
+# outside the repository, for example in %USERPROFILE%\.sukhanovlabs\.
+storeFile=C:/Users/CHANGE_ME/.sukhanovlabs/habittracker-release.jks
+storePassword=CHANGE_ME
+keyAlias=habittracker
+keyPassword=CHANGE_ME

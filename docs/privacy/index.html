@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Политика конфиденциальности приложения «Привыкай — трекер привычек» для Android: локальное хранение, напоминания, отсутствие интернета, аналитики и рекламы.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0f5132">
+  <title>Политика конфиденциальности — Привыкай</title>
+  <style>
+    :root {
+      --ink: #14201b;
+      --ink-soft: #40514a;
+      --muted: #63756d;
+      --line: #dbe4df;
+      --surface: #ffffff;
+      --canvas: #f4f7f5;
+      --accent: #0f5132;
+      --accent-soft: #e7f4ec;
+      --warn-bg: #fff3cd;
+      --warn-ink: #6b4e00;
+      --radius: 14px;
+      --max: 800px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      padding: 32px 20px 56px;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 40px 44px 44px;
+      box-shadow: 0 1px 2px rgba(20, 32, 27, .04), 0 18px 40px rgba(20, 32, 27, .05);
+    }
+
+    .draft-warning {
+      margin: 0 auto 20px;
+      max-width: var(--max);
+      padding: 12px 16px;
+      border: 1px solid #e6c96a;
+      border-radius: 10px;
+      background: var(--warn-bg);
+      color: var(--warn-ink);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .eyebrow svg { width: 15px; height: 15px; flex: none; }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(27px, 4vw, 34px);
+      line-height: 1.2;
+      letter-spacing: -.02em;
+      color: var(--accent);
+    }
+
+    .lead {
+      margin: 0 0 8px;
+      color: var(--ink-soft);
+      font-size: 18px;
+    }
+
+    .meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .summary {
+      margin: 26px 0 34px;
+      padding: 20px 22px;
+      border: 1px solid #cde5d7;
+      border-radius: 12px;
+      background: var(--accent-soft);
+    }
+
+    .summary h2 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      color: var(--accent);
+    }
+
+    .summary ul { margin: 0; padding-left: 20px; }
+    .summary li { margin: 5px 0; }
+
+    h2 {
+      margin: 36px 0 10px;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: -.01em;
+      scroll-margin-top: 20px;
+    }
+
+    h3 {
+      margin: 22px 0 6px;
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    p { margin: 9px 0; }
+    ul, ol { margin: 9px 0; padding-left: 23px; }
+    li { margin: 5px 0; }
+
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15.5px;
+    }
+
+    th, td {
+      padding: 11px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      background: #f7faf8;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .note {
+      margin: 14px 0;
+      padding: 14px 16px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      background: #f7faf8;
+      color: var(--ink-soft);
+      font-size: 15.5px;
+    }
+
+    .contact {
+      margin: 14px 0 0;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfcfb;
+    }
+
+    .contact dl { margin: 0; }
+    .contact dt { margin-top: 8px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .contact dt:first-child { margin-top: 0; }
+    .contact dd { margin: 1px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    footer p { margin: 4px 0; }
+
+    @media (max-width: 620px) {
+      body { padding: 16px 12px 32px; font-size: 16px; }
+      .page { padding: 26px 20px 30px; border-radius: 12px; }
+      .summary { padding: 17px 16px; }
+      th, td { padding: 10px 11px; }
+    }
+
+    @media print {
+      body { padding: 0; background: #fff; font-size: 11pt; }
+      .page { max-width: none; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+      .draft-warning { display: none; }
+      a { color: inherit; text-decoration: none; }
+      h2 { break-after: avoid; }
+      table, .note, .contact { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 3l7 3v5c0 4.4-2.9 8.4-7 10-4.1-1.6-7-5.6-7-10V6l7-3z"></path>
+        <path d="M9 12l2 2 4-4"></path>
+      </svg>
+      Привыкай · Android
+    </p>
+
+    <h1>Политика конфиденциальности</h1>
+    <p class="lead">Приложение «Привыкай — трекер привычек»</p>
+    <p class="meta">Редакция от 23 октября 2026 · Пакет <code>com.sukhanovlabs.habittracker</code> · Версия 1.0.0</p>
+
+    <section class="summary" aria-labelledby="summary-title">
+      <h2 id="summary-title">Коротко</h2>
+      <ul>
+        <li>Приложение работает офлайн и не запрашивает доступ в интернет.</li>
+        <li>Нет аккаунта, регистрации, рекламы, аналитики и сторонних SDK, собирающих данные.</li>
+        <li>Привычки, история и настройки хранятся только на вашем устройстве.</li>
+        <li>Удалить данные можно в приложении или вместе с приложением.</li>
+      </ul>
+    </section>
+
+    <h2 id="general">1. Общие сведения</h2>
+    <p>Настоящая Политика конфиденциальности (далее — Политика) описывает, какие данные обрабатываются в мобильном приложении «Привыкай — трекер привычек» для Android (далее — Приложение), как они хранятся и как вы можете ими управлять.</p>
+    <p><strong>Оператор:</strong> Суханов Владимир Владимирович.<br>
+      <strong>Контакт для вопросов об обработке данных:</strong> <a href="mailto:vladimir__suhanov@mail.ru">vladimir__suhanov@mail.ru</a>.</p>
+    <p>Политика применяется только к Приложению. RuStore, операционная система Android и сервисы Google — самостоятельные продукты со своими правилами и политиками; Оператор не управляет ими.</p>
+    <p>Используя Приложение, вы подтверждаете, что прочитали Политику. Если вы не согласны с ней, пожалуйста, не используйте Приложение.</p>
+
+    <h2 id="data">2. Какие данные обрабатываются</h2>
+    <p>Приложение не собирает персональные данные и не передаёт их Оператору или третьим лицам. Все сведения, которые вы вносите, создаются вами и остаются на устройстве.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Категория</th>
+            <th>Что входит</th>
+            <th>Зачем нужно</th>
+            <th>Куда попадает</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Привычки</td>
+            <td>Название (до 40 символов), иконка, цвет, дни недели, время напоминания</td>
+            <td>Показать привычку в списке и запланировать напоминание</td>
+            <td>Локальная база на устройстве</td>
+          </tr>
+          <tr>
+            <td>История выполнения</td>
+            <td>Отметки по датам, текущая и лучшая серия</td>
+            <td>Показать прогресс, серию и статистику</td>
+            <td>Локальная база на устройстве</td>
+          </tr>
+          <tr>
+            <td>Настройки</td>
+            <td>Тема оформления, факт прохождения знакомства с приложением, настройки напоминаний</td>
+            <td>Сохранить выбранный вид и поведение Приложения</td>
+            <td>Локальная база на устройстве</td>
+          </tr>
+          <tr>
+            <td>Технические и идентификационные данные</td>
+            <td>Имя, телефон, e-mail, геолокация, контакты, фото, файлы, микрофон, камера, рекламный идентификатор, идентификатор устройства, IP-адрес, журналы использования и отчёты о сбоях</td>
+            <td>Не собираются</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Разрешения Android</h3>
+    <p>В Приложении заявлены только разрешения, необходимые для напоминаний:</p>
+    <ul>
+      <li><strong>Уведомления</strong> — чтобы показывать напоминания о привычках. Разрешение можно отозвать в настройках телефона; Приложение продолжит работать без напоминаний.</li>
+      <li><strong>Приём сигнала о загрузке устройства</strong> — чтобы восстановить расписание напоминаний после перезагрузки телефона или обновления Приложения.</li>
+      <li><strong>Вибрация</strong> — чтобы уведомление могло вибрировать, если это включено в настройках телефона.</li>
+    </ul>
+    <p>Приложение не запрашивает разрешение <code>INTERNET</code> и технически не может отправлять данные в сеть.</p>
+
+    <h2 id="purposes">3. Цели обработки</h2>
+    <p>Данные используются исключительно для работы Приложения:</p>
+    <ul>
+      <li>создание, отображение и редактирование привычек;</li>
+      <li>отметка выполнения, расчёт серий и статистики;</li>
+      <li>планирование и показ локальных напоминаний в выбранные дни и время;</li>
+      <li>сохранение настроек между запусками.</li>
+    </ul>
+    <p>Оператор не использует данные для рекламы, профилирования, автоматизированных решений, маркетинговых рассылок или передачи третьим лицам. Данные не покидают ваше устройство.</p>
+
+    <h2 id="storage">4. Где и как хранятся данные</h2>
+    <p>Привычки, история и настройки хранятся в локальной базе данных внутри приватного хранилища Приложения на вашем устройстве. Доступ к этому хранилищу ограничен средствами Android: другие приложения не могут прочитать его без прав суперпользователя, а Оператор не имеет к нему удалённого доступа.</p>
+    <p>Приложение не использует серверы, облако, аккаунты и синхронизацию. У Оператора нет копии ваших записей.</p>
+    <div class="note">
+      <strong>Системное резервное копирование.</strong> Если в настройках телефона включено резервное копирование Android, операционная система может сохранить копию данных Приложения в ваш аккаунт Google. Это делает система, а не Приложение; такая копия управляется средствами Google и правилами Google. Отключить её можно в настройках резервного копирования телефона.
+    </div>
+    <p><strong>Уведомления.</strong> Текст напоминания формируется на устройстве и содержит название привычки. В зависимости от настроек телефона он может быть виден на экране блокировки. Скрыть содержимое уведомлений можно в настройках Android.</p>
+
+    <h2 id="retention">5. Сроки хранения</h2>
+    <p>Данные хранятся на устройстве до одного из событий:</p>
+    <ul>
+      <li>вы удалили отдельную привычку — её запись и связанная история удаляются сразу;</li>
+      <li>вы выполнили сброс всех данных в настройках Приложения — привычки, история и настройки удаляются сразу;</li>
+      <li>вы удалили Приложение — Android удаляет его локальные данные.</li>
+    </ul>
+    <p>Оператор не хранит данные на своих серверах и не может восстановить их после удаления. Срок хранения копии в системном резервном копировании определяется настройками вашего аккаунта Google.</p>
+
+    <h2 id="deletion">6. Удаление данных и ваши права</h2>
+    <p>Вы можете в любой момент:</p>
+    <ul>
+      <li><strong>посмотреть</strong> свои данные — они отображаются на экранах «Сегодня», «Статистика» и в настройках;</li>
+      <li><strong>исправить</strong> привычку или настройки через экран редактирования;</li>
+      <li><strong>удалить</strong> отдельную привычку через меню привычки;</li>
+      <li><strong>удалить всё</strong> через «Настройки» → «Сбросить все данные» (удаление требует подтверждения);</li>
+      <li><strong>отозвать согласие</strong> — прекратить использование Приложения и удалить его.</li>
+    </ul>
+    <p>Поскольку Оператор не получает ваши данные, обращения об удалении или исправлении выполняются непосредственно на устройстве. Если у вас остались вопросы или вы считаете, что ваши права нарушены, напишите на <a href="mailto:vladimir__suhanov@mail.ru">vladimir__suhanov@mail.ru</a>. Оператор ответит в срок, установленный законодательством Российской Федерации.</p>
+    <p>Вы также вправе обратиться в уполномоченный орган по защите прав субъектов персональных данных — Роскомнадзор.</p>
+
+    <h2 id="third-parties">7. Передача третьим лицам</h2>
+    <p>Оператор не продаёт, не передаёт и не раскрывает ваши данные третьим лицам. В Приложении нет рекламных, аналитических и иных сторонних SDK, которые собирают данные.</p>
+    <p>Исключения, не связанные с волей Оператора: системные уведомления Android, системное резервное копирование (если вы его включили) и работа самого магазина RuStore, который обрабатывает данные об установке и использовании Приложения по своим правилам.</p>
+
+    <h2 id="children">8. Дети</h2>
+    <p>Приложение не адресовано детям и не собирает данные о возрасте. Поскольку Приложение не собирает персональные данные, специальные правила для данных несовершеннолетних не применяются. Если у вас есть вопросы, свяжитесь с Оператором по указанному контакту.</p>
+
+    <h2 id="security">9. Безопасность</h2>
+    <p>Данные защищены изоляцией приложений Android и хранятся в приватной области Приложения. Отсутствие доступа в интернет снижает риск утечки через сеть. Вместе с тем ни один способ хранения не даёт абсолютной гарантии: доступ к данным возможен для человека, который разблокировал ваше устройство, а также через системное резервное копирование и уведомления на экране блокировки. Рекомендуем использовать блокировку экрана и проверить настройки приватности уведомлений.</p>
+
+    <h2 id="changes">10. Изменения Политики</h2>
+    <p>Оператор может обновлять Политику, например при выпуске новой версии Приложения. Новая редакция публикуется по этому же адресу с новой датой. Существенные изменения Оператор дополнительно отражает в описании обновления Приложения. Если вы продолжаете пользоваться Приложением после вступления изменений в силу, считается, что вы приняли новую редакцию. Актуальная версия всегда доступна на этой странице.</p>
+
+    <h2 id="contacts">11. Контакты</h2>
+    <div class="contact">
+      <dl>
+        <dt>Оператор</dt>
+        <dd>Суханов Владимир Владимирович</dd>
+        <dt>Электронная почта</dt>
+        <dd><a href="mailto:vladimir__suhanov@mail.ru">vladimir__suhanov@mail.ru</a></dd>
+        <dt>Приложение</dt>
+        <dd>«Привыкай — трекер привычек», <code>com.sukhanovlabs.habittracker</code></dd>
+      </dl>
+    </div>
+
+    <footer>
+      <p>© 2026 Sukhanov labs. Все права защищены.</p>
+      <p>Эта страница не использует cookie, аналитику, рекламу и внешние ресурсы. Хостинг-провайдер может сохранять IP-адрес посетителя в журналах безопасности. Страница доступна без регистрации.</p>
+    </footer>
+  </main>
+</body>
+</html>

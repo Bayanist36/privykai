@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Трекер привычек — дизайн-концепт MVP</title>
+    <link rel="stylesheet" href="styles/design-system.css" />
+    <link rel="stylesheet" href="styles/screen.css" />
+    <style>
+      html,
+      body {
+        height: auto;
+        overflow: auto;
+      }
+      body {
+        padding: 48px 0 72px;
+        background: var(--bg-app);
+      }
+      .wrap {
+        width: 1120px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .hero {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .kicker {
+        font: 600 12px/16px var(--font);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--c-green-700);
+      }
+      .hero h1 {
+        font: 700 40px/46px var(--font);
+        letter-spacing: -1px;
+        margin-top: 10px;
+      }
+      .hero p {
+        font: var(--t-body);
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin-top: 12px;
+      }
+      .hero__actions {
+        display: flex;
+        gap: 10px;
+        flex: none;
+      }
+      .hero__actions a {
+        display: inline-flex;
+        align-items: center;
+        height: 44px;
+        padding: 0 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border-strong);
+        background: #fff;
+        font: 600 14px/20px var(--font);
+      }
+      .hero__actions a.is-primary {
+        background: var(--c-green-600);
+        color: #fff;
+        border-color: var(--c-green-600);
+      }
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin: 24px 0 8px;
+      }
+      .meta div {
+        background: #fff;
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        padding: 14px 16px;
+      }
+      .meta b {
+        display: block;
+        font: 600 18px/24px var(--font);
+      }
+      .meta span {
+        font: var(--t-caption);
+        color: var(--text-secondary);
+      }
+      h2.section {
+        font: 700 22px/28px var(--font);
+        letter-spacing: -0.3px;
+        margin: 44px 0 6px;
+      }
+      p.section-lead {
+        font: var(--t-body-s);
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+      }
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(4, 180px);
+        gap: 28px 32px;
+      }
+      .card {
+        display: block;
+      }
+      .preview {
+        width: 180px;
+        height: 400px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid var(--border-subtle);
+        background: #fff;
+        box-shadow: 0 10px 28px rgba(24, 32, 27, 0.07);
+        position: relative;
+      }
+      .preview iframe {
+        width: 360px;
+        height: 800px;
+        border: 0;
+        transform: scale(0.5);
+        transform-origin: top left;
+      }
+      .card__label {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .card__label b {
+        font: 600 13px/18px var(--font);
+      }
+      .card__label span {
+        font: 11px/14px var(--font);
+        color: var(--text-tertiary);
+      }
+      .card__caption {
+        font: var(--t-caption);
+        color: var(--text-secondary);
+        margin-top: 2px;
+      }
+      .cols {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr 1fr;
+        gap: 20px;
+        align-items: stretch;
+      }
+      .panel {
+        background: #fff;
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 20px;
+      }
+      .panel h3 {
+        font: 600 15px/22px var(--font);
+        margin-bottom: 12px;
+      }
+      .panel p {
+        font: var(--t-body-s);
+        color: var(--text-secondary);
+      }
+      .swatches {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .swatches i {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: block;
+        border: 1px solid rgba(24, 32, 27, 0.06);
+      }
+      .panel ul {
+        margin: 0;
+        padding-left: 18px;
+        font: var(--t-body-s);
+        color: var(--text-secondary);
+      }
+      .panel li + li {
+        margin-top: 6px;
+      }
+      .type-sample {
+        font: 700 26px/32px var(--font);
+        letter-spacing: -0.6px;
+        margin-bottom: 6px;
+      }
+      .store-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      .store-row figure {
+        margin: 0;
+      }
+      .store-row img {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid var(--border-subtle);
+        display: block;
+      }
+      .store-row figcaption {
+        font: var(--t-caption);
+        color: var(--text-secondary);
+        margin-top: 8px;
+      }
+      .icon-line {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .icon-line img {
+        width: 72px;
+        height: 72px;
+        border-radius: 16px;
+      }
+      .icon-line b {
+        display: block;
+        font: 600 15px/22px var(--font);
+      }
+      .icon-line span {
+        font: var(--t-caption);
+        color: var(--text-secondary);
+      }
+      .files {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 24px;
+      }
+      .files a {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-subtle);
+        font: var(--t-body-s);
+      }
+      .files a span {
+        color: var(--text-tertiary);
+        font: var(--t-caption);
+      }
+      footer {
+        margin-top: 48px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-subtle);
+        display: flex;
+        justify-content: space-between;
+        font: var(--t-caption);
+        color: var(--text-tertiary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <div>
+          <p class="kicker">Sukhanov labs · дизайн-концепт MVP</p>
+          <h1>Трекер привычек</h1>
+          <p>
+            Спокойный офлайн-трекер для Android: отметки в один тап, серии, простая статистика и
+            напоминания. Базовый экран 360 × 800 dp, светлая тема, русский интерфейс.
+          </p>
+        </div>
+        <div class="hero__actions">
+          <a href="mockups/10-components.html">Компоненты</a>
+          <a class="is-primary" href="mockups/02-habits.html">Открыть макет</a>
+        </div>
+      </header>
+
+      <div class="meta">
+        <div><b>360 × 800 dp</b><span>baseline, Android</span></div>
+        <div><b>4 pt</b><span>сетка отступов</span></div>
+        <div><b>Inter</b><span>400 / 500 / 600 / 700</span></div>
+        <div><b>16 эмодзи · 6 цветов</b><span>настройка привычки</span></div>
+      </div>
+
+      <h2 class="section">Экраны</h2>
+      <p class="section-lead">
+        Каждый макет — отдельный HTML-файл 360 × 800. Клик открывает его в полном размере; PNG-экспорт
+        лежит в <code>exports/</code>.
+      </p>
+      <div class="gallery">
+        <a class="card" href="mockups/02-habits.html" target="_blank">
+          <div class="preview"><iframe src="mockups/02-habits.html" title="Сегодня" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Сегодня</b><span>02</span></div>
+          <p class="card__caption">Список и прогресс дня</p>
+        </a>
+        <a class="card" href="mockups/02b-habits-empty.html" target="_blank">
+          <div class="preview"><iframe src="mockups/02b-habits-empty.html" title="Первый запуск" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Первый запуск</b><span>02b</span></div>
+          <p class="card__caption">Пустое состояние + примеры</p>
+        </a>
+        <a class="card" href="mockups/02c-no-habits-today.html" target="_blank">
+          <div class="preview"><iframe src="mockups/02c-no-habits-today.html" title="Нет привычек сегодня" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Нет привычек сегодня</b><span>02c</span></div>
+          <p class="card__caption">Расписание пустое</p>
+        </a>
+        <a class="card" href="mockups/03-add-habit.html" target="_blank">
+          <div class="preview"><iframe src="mockups/03-add-habit.html" title="Новая привычка" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Новая привычка</b><span>03</span></div>
+          <p class="card__caption">Эмодзи, цвет, дни, напоминание</p>
+        </a>
+        <a class="card" href="mockups/04-stats.html" target="_blank">
+          <div class="preview"><iframe src="mockups/04-stats.html" title="Статистика" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Статистика</b><span>04</span></div>
+          <p class="card__caption">7 дней и серии по привычкам</p>
+        </a>
+        <a class="card" href="mockups/05-settings.html" target="_blank">
+          <div class="preview"><iframe src="mockups/05-settings.html" title="Настройки" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Настройки</b><span>05</span></div>
+          <p class="card__caption">Напоминания, данные, о приложении</p>
+        </a>
+        <a class="card" href="mockups/06-habits-loading.html" target="_blank">
+          <div class="preview"><iframe src="mockups/06-habits-loading.html" title="Загрузка" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Загрузка</b><span>06</span></div>
+          <p class="card__caption">Skeleton при чтении из базы</p>
+        </a>
+        <a class="card" href="mockups/07-habit-actions.html" target="_blank">
+          <div class="preview"><iframe src="mockups/07-habit-actions.html" title="Действия с привычкой" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Действия с привычкой</b><span>07</span></div>
+          <p class="card__caption">Bottom sheet</p>
+        </a>
+        <a class="card" href="mockups/08b-delete-habit.html" target="_blank">
+          <div class="preview"><iframe src="mockups/08b-delete-habit.html" title="Удаление привычки" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Удаление привычки</b><span>08b</span></div>
+          <p class="card__caption">Диалог подтверждения</p>
+        </a>
+        <a class="card" href="mockups/08-delete-all.html" target="_blank">
+          <div class="preview"><iframe src="mockups/08-delete-all.html" title="Сброс всех данных" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Сброс всех данных</b><span>08</span></div>
+          <p class="card__caption">Двойное подтверждение, шаг 1</p>
+        </a>
+        <a class="card" href="mockups/09-completed-snackbar.html" target="_blank">
+          <div class="preview"><iframe src="mockups/09-completed-snackbar.html" title="Отметка и отмена" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Отметка и отмена</b><span>09</span></div>
+          <p class="card__caption">Снекбар «Выполнено. Серия: 13»</p>
+        </a>
+        <a class="card" href="mockups/01-onboarding.html" target="_blank">
+          <div class="preview"><iframe src="mockups/01-onboarding.html" title="Онбординг · 1" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Онбординг · 1</b><span>P2</span></div>
+          <p class="card__caption">Концепт вне MVP</p>
+        </a>
+        <a class="card" href="mockups/01b-onboarding-2.html" target="_blank">
+          <div class="preview"><iframe src="mockups/01b-onboarding-2.html" title="Онбординг · 2" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Онбординг · 2</b><span>P2</span></div>
+          <p class="card__caption">Концепт вне MVP</p>
+        </a>
+        <a class="card" href="mockups/01c-onboarding-3.html" target="_blank">
+          <div class="preview"><iframe src="mockups/01c-onboarding-3.html" title="Онбординг · 3" loading="lazy"></iframe></div>
+          <div class="card__label"><b>Онбординг · 3</b><span>P2</span></div>
+          <p class="card__caption">Концепт вне MVP</p>
+        </a>
+      </div>
+
+            <h2 class="section">Визуальное направление</h2>
+      <p class="section-lead">Спокойствие и ясность вместо геймификации и давления.</p>
+      <div class="cols">
+        <div class="panel">
+          <h3>Палитра</h3>
+          <div class="swatches">
+            <i style="background: #faf8f3"></i>
+            <i style="background: #ffffff"></i>
+            <i style="background: #2a7052"></i>
+            <i style="background: #edf4ef"></i>
+            <i style="background: #d98a2b"></i>
+          </div>
+          <p>
+            Тёплая бумага #FAF8F3, глубокий зелёный #2A7052, янтарный акцент для серий. Контраст
+            текста — не ниже AA.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Типографика</h3>
+          <div class="type-sample">Сегодня</div>
+          <p>
+            Inter (OFL), кириллица + латиница. Шкала 40 / 28 / 20 / 17 / 16 / 14 / 13 / 12.
+            Заголовки 700, основной текст 400, служебный 500.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Тон</h3>
+          <ul>
+            <li>Поддерживаем, а не стыдим: «Серия начнётся сегодня» вместо «Вы всё пропустили».</li>
+            <li>Один экран — один ответ. Никаких лишних настроек в MVP.</li>
+            <li>Данные принадлежат пользователю: офлайн по умолчанию.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="section">Иконка приложения</h2>
+      <p class="section-lead">Основной концепт A — кольцо прогресса и галочка. Альтернативы и проверка размеров — в файле предпросмотра.</p>
+      <div class="panel" style="display: flex; align-items: center; gap: 32px">
+        <div class="icon-line" style="margin: 0">
+          <img src="assets/app-icon.svg" alt="Иконка приложения" />
+          <div>
+            <b>app-icon.svg / .png</b>
+            <span>512 × 512 для RuStore, 1024 × 1024 для Google Play, adaptive layers 108 dp</span>
+          </div>
+        </div>
+        <a class="btn btn--secondary" style="margin-left: auto; height: 44px" href="assets/icon-preview.html">Все концепты</a>
+      </div>
+
+      <h2 class="section">Скриншоты для RuStore</h2>
+      <p class="section-lead">1080 × 1920 PNG, 4 кадра. Исходники — HTML, экспорт — в <code>store/</code>.</p>
+      <div class="store-row">
+        <figure>
+          <img src="store/store-1-habits.png" alt="Скриншот 1" />
+          <figcaption>1 · Все привычки на одном экране</figcaption>
+        </figure>
+        <figure>
+          <img src="store/store-2-streak.png" alt="Скриншот 2" />
+          <figcaption>2 · Серии, которые держат</figcaption>
+        </figure>
+        <figure>
+          <img src="store/store-3-add.png" alt="Скриншот 3" />
+          <figcaption>3 · Новая привычка за минуту</figcaption>
+        </figure>
+        <figure>
+          <img src="store/store-4-offline.png" alt="Скриншот 4" />
+          <figcaption>4 · Без интернета и аккаунта</figcaption>
+        </figure>
+      </div>
+
+      <h2 class="section">Файлы</h2>
+      <div class="files">
+        <a href="tokens/design-tokens.json">Токены дизайн-системы <span>JSON</span></a>
+        <a href="tokens/theme.dart">Flutter-тема (reference) <span>Dart</span></a>
+        <a href="mockups/10-components.html">Компоненты и состояния <span>HTML</span></a>
+        <a href="assets/icon-preview.html">Иконка: 3 концепта и размеры <span>HTML</span></a>
+        <a href="README.md">Как открыть и пересобрать <span>MD</span></a>
+        <a href="DESIGN_SPEC.md">Спецификация для разработчика <span>MD</span></a>
+        <a href="exports/02-habits.png">PNG-экспорт экранов <span>1080 × 2400</span></a>
+      </div>
+
+      <footer>
+        <span>Sukhanov labs · трекер привычек · MVP 1.0</span>
+        <span>23 октября 2026</span>
+      </footer>
+    </div>
+  </body>
+</html>

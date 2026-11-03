@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Сегодня — нет привычек по расписанию</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--tabbar body--center">
+        <header class="screen-head">
+          <p class="screen-head__eyebrow">Суббота, 24 октября</p>
+          <h1 class="screen-head__title">Сегодня</h1>
+        </header>
+
+        <section class="empty empty--fill">
+          <div class="empty__art">
+            <svg class="icon"><use href="#i-calendar" /></svg>
+          </div>
+          <h2 class="empty__title">На сегодня привычек нет</h2>
+          <p class="empty__text">
+            По расписанию сегодня отдых. Завтра привычки вернутся — или добавьте новую.
+          </p>
+          <button class="btn btn--primary empty__cta">
+            <svg class="icon icon--md"><use href="#i-plus" /></svg>
+            Добавить привычку
+          </button>
+        </section>
+      </main>
+      <nav class="tabbar" aria-label="Основная навигация">
+        <a class="tab is-active" href="#">
+          <svg class="icon"><use href="#i-today" /></svg>
+          <span>Сегодня</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-chart" /></svg>
+          <span>Статистика</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-settings" /></svg>
+          <span>Настройки</span>
+        </a>
+      </nav>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

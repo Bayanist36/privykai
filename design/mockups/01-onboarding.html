@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>Онбординг — шаг 1</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <div class="onboarding">
+        <div class="onboarding__top">
+          <button class="skip">Пропустить</button>
+        </div>
+
+        <div class="onboarding__art">
+          <div class="art">
+            <div class="art__blob art__blob--1"></div>
+            <div class="art__blob art__blob--2"></div>
+
+            <svg class="art__ring" viewBox="0 0 184 184" fill="none" aria-hidden="true">
+              <circle cx="92" cy="92" r="82" stroke="#eae5da" stroke-width="10" />
+              <circle
+                cx="92"
+                cy="92"
+                r="82"
+                stroke="#2a7052"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-dasharray="350 515"
+                transform="rotate(-90 92 92)"
+              />
+              <circle cx="18.2" cy="127" r="7" fill="#faf8f3" />
+              <circle cx="18.2" cy="127" r="5" fill="#d98a2b" />
+            </svg>
+
+            <div class="art__center">
+              <svg class="icon"><use href="#i-check" /></svg>
+            </div>
+
+            <div class="float-card float-card--streak">
+              <span class="flame-badge"><svg class="icon"><use href="#i-flame" /></svg></span>
+              <span>
+                <b>12 дней</b>
+                <span>подряд</span>
+              </span>
+            </div>
+
+            <div class="float-card float-card--habit">
+              <span class="mini-check"><svg class="icon"><use href="#i-check" /></svg></span>
+              <span>
+                <b>Чтение</b>
+                <span>выполнено сегодня</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding__copy">
+          <div class="dots-indicator"><i class="is-active"></i><i></i><i></i></div>
+          <h1 class="onboarding__title">Маленькие шаги.<br />Большие перемены.</h1>
+          <p class="onboarding__text">
+            Отмечайте привычки в один тап, следите за серией и возвращайтесь, когда собьётесь.
+          </p>
+        </div>
+
+        <div class="onboarding__footer">
+          <button class="btn btn--primary btn--block">Далее</button>
+          <p class="onboarding__hint">Настройка займёт меньше минуты</p>
+        </div>
+      </div>
+    </div>
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>
