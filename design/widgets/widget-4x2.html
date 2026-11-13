@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=820, initial-scale=1" />
+    <title>Виджет 4×2 — варианты и состояния</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/widgets.css" />
+  </head>
+  <body class="wb" style="width: 820px">
+    <header class="wb-head">
+      <h1 class="wb-head__title">Виджет 4×2 · 328 × 160 dp</h1>
+      <p class="wb-head__sub">
+        Три варианта компоновки, светлая и тёмная тема, четыре состояния.
+        Экспорт @3x: 984 × 480 px. Безопасный отступ 12 dp.
+      </p>
+    </header>
+
+    <section class="wb-section">
+      <h2 class="wb-section__title">Вариант A — список и прогресс · рекомендуемый</h2>
+      <div class="wb-grid" id="board-a"></div>
+    </section>
+
+    <section class="wb-section">
+      <h2 class="wb-section__title">Варианты B и C — альтернативы</h2>
+      <div class="wb-grid" id="board-bc"></div>
+    </section>
+
+    <script>
+      const check = (on) =>
+        `<span class="w-check ${on ? "is-on" : ""}" aria-hidden="true"><svg class="icon"><use href="#i-check" /></svg></span>`;
+
+      const row = (emoji, name, meta, on) => `<div class="w-row">
+        <span class="w-tile" aria-hidden="true">${emoji}</span>
+        <span class="w-row__text">
+          <span class="w-row__name">${name}</span>
+          <span class="w-row__meta">${meta}</span>
+        </span>
+        ${check(on)}
+      </div>`;
+
+      const ring = (percent) => {
+        const radius = 27;
+        const circumference = 2 * Math.PI * radius;
+        const dash = ((percent / 100) * circumference).toFixed(2);
+        return `<span class="w-ring" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <circle class="w-ring__track" cx="32" cy="32" r="${radius}"></circle>
+            <circle class="w-ring__fill" cx="32" cy="32" r="${radius}"
+              stroke-dasharray="${dash} ${circumference.toFixed(2)}"></circle>
+          </svg>
+          <span class="w-ring__label">${percent}%</span>
+        </span>`;
+      };
+
+      const a = ({ dark, state }) => {
+        const shot = `4x2-A-${dark ? "dark" : "light"}-${state}`;
+        const cls = ["w", "w--4", "w4a", dark && "is-dark", state === "done" && "is-done"].filter(Boolean).join(" ");
+        const header = (title, count) =>
+          `<div class="w4a__head"><span class="w4a__title">${title}</span><span class="w4a__count">${count}</span></div>`;
+
+        let body;
+        if (state === "empty") {
+          body = `${header("Сегодня", "0 из 0")}
+            <div class="w-empty-center">
+              <span class="w-empty-badge"><svg class="icon"><use href="#i-leaf" /></svg></span>
+              <div class="w-empty-text">
+                <div class="w-empty-title">Нет привычек</div>
+                <div class="w-empty-sub">Добавьте первую в приложении</div>
+              </div>
+            </div>
+            <div class="w4a__foot"><span class="w-note">Откройте «Сегодня»</span></div>`;
+        } else if (state === "streak") {
+          body = `${header("Серия", "лучшая 28")}
+            <div class="w-streak">
+              <span class="w-streak__badge"><svg class="icon"><use href="#i-flame" /></svg></span>
+              <div>
+                <div class="w-streak__value">12 дней подряд</div>
+                <div class="w-streak__label">Вода · сегодня уже отмечена</div>
+              </div>
+            </div>
+            <div class="w4a__foot"><span class="w-note">Лучшая серия — 28 дней</span>${check(true)}</div>`;
+        } else {
+          const done = state === "done";
+          body = `${header(done ? "Готово" : "Сегодня", done ? "4 из 4" : "2 из 4")}
+            <div class="w-bar w4a__bar"><i style="width: ${done ? 100 : 50}%"></i></div>
+            <div class="w4a__list">
+              ${row("💧", "Вода", "12 дней подряд", true)}
+              ${row("📖", "Чтение", done ? "4 дня подряд" : "4 дня подряд", done)}
+            </div>
+            <div class="w4a__foot">
+              <span class="w-note">${done ? "Всё выполнено" : "Осталось 2"}</span>
+              <span class="w-flame"><svg class="icon"><use href="#i-flame" /></svg>12 дней</span>
+            </div>`;
+        }
+        return `<figure class="wb-item">
+          <div class="${cls}" data-shot="${shot}">${body}</div>
+          <figcaption class="wb-caption">A · ${dark ? "тёмная" : "светлая"} · ${
+            { active: "активна", done: "выполнено", empty: "пусто", streak: "серия" }[state]
+          }</figcaption>
+        </figure>`;
+      };
+
+      const b = (dark) => `<figure class="wb-item">
+        <div class="w w--4 w4b ${dark ? "is-dark" : ""}">
+          <div class="w4b__left">
+            ${ring(50)}
+            <span class="w-note">2 из 4</span>
+          </div>
+          <div class="w4b__right">
+            <div class="w4b__title">Сегодня</div>
+            <div class="w4b__list">
+              ${row("💧", "Вода", "12 дней", true)}
+              ${row("📖", "Чтение", "4 дня", false)}
+              ${row("🏃", "Зарядка", "серия 0", false)}
+            </div>
+            <div class="w4a__foot"><span class="w-note">Осталось 2</span></div>
+          </div>
+        </div>
+        <figcaption class="wb-caption">B · ${dark ? "тёмная" : "светлая"} · активна</figcaption>
+      </figure>`;
+
+      const weekDot = (on, today) =>
+        `<span class="w4c__dot ${on ? "is-on" : ""} ${today ? "is-today" : ""}">
+          <svg class="icon"><use href="#i-check" /></svg>
+        </span>`;
+      const c = (dark) => `<figure class="wb-item">
+        <div class="w w--4 w4c ${dark ? "is-dark" : ""}">
+          <div class="w4c__head">
+            <span class="w4c__title">Эта неделя</span>
+            <span class="w4c__count">5 из 7</span>
+          </div>
+          <div class="w4c__week" aria-label="Отмечено 5 из 7 дней">
+            <span class="w4c__day">${weekDot(true, false)}Пн</span>
+            <span class="w4c__day">${weekDot(true, true)}Вт</span>
+            <span class="w4c__day">${weekDot(true, false)}Ср</span>
+            <span class="w4c__day">${weekDot(false, false)}Чт</span>
+            <span class="w4c__day">${weekDot(true, false)}Пт</span>
+            <span class="w4c__day">${weekDot(true, false)}Сб</span>
+            <span class="w4c__day">${weekDot(false, false)}Вс</span>
+          </div>
+          <div class="w4c__foot">
+            <span class="w-note">Лучшая серия — 12 дней</span>
+            <span class="w-flame"><svg class="icon"><use href="#i-flame" /></svg>5 дней</span>
+          </div>
+        </div>
+        <figcaption class="wb-caption">C · ${dark ? "тёмная" : "светлая"} · неделя</figcaption>
+      </figure>`;
+
+      const states = ["active", "done", "empty", "streak"];
+      document.getElementById("board-a").innerHTML = [
+        ...states.map((state) => a({ dark: false, state })),
+        ...states.map((state) => a({ dark: true, state })),
+      ].join("");
+      document.getElementById("board-bc").innerHTML = [b(false), b(true), c(false), c(true)].join("");
+    </script>
+
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

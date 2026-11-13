@@ -126,14 +126,65 @@ class FlutterLocalReminderScheduler implements ReminderScheduler {
       return;
     }
 
+    final now = DateTime.now();
+    final planned = <PlannedReminder>[];
+    final data = <int, _ScheduledNotification>{};
+
     for (final habit in habits) {
       if (habit.weekdaysMask == 0 || !habit.hasReminder) {
         continue;
       }
-      await _scheduleHabit(habit);
+      for (final reminder in ReminderPlan.planFor(habit, now: now)) {
+        planned.add(reminder);
+        data[reminder.id] = _ScheduledNotification(
+          title: habit.name,
+          body: habit.isIntervalReminder
+              ? 'Пора отметить привычку.'
+              : 'Отметьте привычку, когда будет удобно.',
+          payload: habit.id,
+          details: _habitDetails,
+        );
+      }
     }
 
-    await _scheduleEvening(evening);
+    // A fully completed day needs no "did you finish?" nudge. The other
+    // weekdays keep their weekly slot.
+    final effectiveEvening = ReminderPlan.effectiveEvening(
+      evening: evening,
+      habits: habits,
+      now: now,
+    );
+
+    for (final reminder in ReminderPlan.eveningPlan(
+      evening: effectiveEvening,
+      now: now,
+    )) {
+      planned.add(reminder);
+      data[reminder.id] = const _ScheduledNotification(
+        title: 'Как прошёл день?',
+        body: 'Отметьте выполненные привычки, пока не закончился день.',
+        payload: eveningPayload,
+        details: _eveningDetails,
+      );
+    }
+
+    // Keep the nearest reminders when a plan exceeds the safe pending-alarm
+    // count; the distant tail is dropped instead of the closest slots.
+    for (final reminder in ReminderPlan.capToLimit(planned)) {
+      final item = data[reminder.id];
+      if (item == null) {
+        continue;
+      }
+      await _schedule(
+        id: reminder.id,
+        dateTime: reminder.dateTime,
+        details: item.details,
+        title: item.title,
+        body: item.body,
+        payload: item.payload,
+        repeatsWeekly: reminder.repeatsWeekly,
+      );
+    }
   }
 
   AndroidFlutterLocalNotificationsPlugin? get _android => _plugin
@@ -167,64 +218,27 @@ class FlutterLocalReminderScheduler implements ReminderScheduler {
     );
   }
 
-  Future<void> _scheduleHabit(Habit habit) async {
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        channelId,
-        channelName,
-        channelDescription: channelDescription,
-        importance: Importance.defaultImportance,
-        priority: Priority.defaultPriority,
-        category: AndroidNotificationCategory.reminder,
-      ),
-    );
+  static const NotificationDetails _habitDetails = NotificationDetails(
+    android: AndroidNotificationDetails(
+      channelId,
+      channelName,
+      channelDescription: channelDescription,
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+      category: AndroidNotificationCategory.reminder,
+    ),
+  );
 
-    final plan = ReminderPlan.planFor(habit, now: DateTime.now());
-    for (final reminder in plan) {
-      await _schedule(
-        id: reminder.id,
-        dateTime: reminder.dateTime,
-        details: details,
-        title: habit.name,
-        body: habit.isIntervalReminder
-            ? 'Пора отметить привычку.'
-            : 'Отметьте привычку, когда будет удобно.',
-        payload: habit.id,
-      );
-    }
-  }
-
-  Future<void> _scheduleEvening(EveningReminder? evening) async {
-    final plan = ReminderPlan.eveningPlan(
-      evening: evening,
-      now: DateTime.now(),
-    );
-    if (plan.isEmpty) {
-      return;
-    }
-
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        eveningChannelId,
-        eveningChannelName,
-        channelDescription: eveningChannelDescription,
-        importance: Importance.defaultImportance,
-        priority: Priority.defaultPriority,
-        category: AndroidNotificationCategory.reminder,
-      ),
-    );
-
-    for (final reminder in plan) {
-      await _schedule(
-        id: reminder.id,
-        dateTime: reminder.dateTime,
-        details: details,
-        title: 'Как прошёл день?',
-        body: 'Отметьте выполненные привычки, пока не закончился день.',
-        payload: eveningPayload,
-      );
-    }
-  }
+  static const NotificationDetails _eveningDetails = NotificationDetails(
+    android: AndroidNotificationDetails(
+      eveningChannelId,
+      eveningChannelName,
+      channelDescription: eveningChannelDescription,
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+      category: AndroidNotificationCategory.reminder,
+    ),
+  );
 
   Future<void> _schedule({
     required int id,
@@ -233,6 +247,7 @@ class FlutterLocalReminderScheduler implements ReminderScheduler {
     required String title,
     required String body,
     required String payload,
+    bool repeatsWeekly = true,
   }) async {
     await _plugin.zonedSchedule(
       id: id,
@@ -249,7 +264,25 @@ class FlutterLocalReminderScheduler implements ReminderScheduler {
       title: title,
       body: body,
       payload: payload,
-      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      // A suppressed evening slot is a one-shot next week: the weekly match
+      // compares only weekday + time and would still fire today (QA-24-01).
+      matchDateTimeComponents: repeatsWeekly
+          ? DateTimeComponents.dayOfWeekAndTime
+          : null,
     );
   }
+}
+
+class _ScheduledNotification {
+  const _ScheduledNotification({
+    required this.title,
+    required this.body,
+    required this.payload,
+    required this.details,
+  });
+
+  final String title;
+  final String body;
+  final String payload;
+  final NotificationDetails details;
 }

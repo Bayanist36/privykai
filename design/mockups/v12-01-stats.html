@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>v1.2 — расширенная статистика</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+    <link rel="stylesheet" href="../styles/v12.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <main class="body body--scroll body--tabbar">
+        <header class="screen-head">
+          <p class="screen-head__eyebrow">2–29 ноября</p>
+          <h1 class="screen-head__title">Статистика</h1>
+        </header>
+
+        <div class="segmented v12-period" role="tablist" aria-label="Период">
+          <span class="segmented__item" role="tab">7 дней</span>
+          <span class="segmented__item is-active" role="tab" aria-selected="true">30 дней</span>
+        </div>
+
+        <section class="stats-summary" aria-label="Прогресс за 30 дней">
+          <div class="stats-summary__top">
+            <div>
+              <p class="stats-summary__label">За последние 30 дней</p>
+              <p class="stats-summary__value">84%</p>
+            </div>
+            <div class="stats-summary__meta">
+              <b>21 из 25</b>
+              запланировано
+            </div>
+          </div>
+          <div class="stats-summary__track"><i style="width: 84%"></i></div>
+          <p class="stats-summary__note">Учитываются только запланированные дни.</p>
+        </section>
+
+        <div class="section-head">
+          <h2 class="section-head__title">Динамика</h2>
+          <span class="section-head__meta">за неделю</span>
+        </div>
+
+        <section class="chart-card" aria-label="Выполнение по дням недели">
+          <div class="chart-card__top">
+            <p class="chart-card__title">5 из 7 дней закрыты полностью</p>
+            <p class="chart-card__meta">среднее 4,1</p>
+          </div>
+          <div class="bars" data-bars></div>
+        </section>
+
+        <div class="section-head">
+          <h2 class="section-head__title">Календарь</h2>
+          <span class="section-head__meta">12 недель · 78%</span>
+        </div>
+
+        <section class="heatmap-card" aria-label="Календарь выполнения">
+          <div class="heatmap" data-heatmap></div>
+          <div class="heatmap__foot">
+            <span class="heatmap__months"><span>Сен</span><span>Окт</span><span>Ноя</span></span>
+            <span class="heatmap__legend">
+              меньше
+              <i style="background: var(--c-sand-100)"></i>
+              <i style="background: var(--c-green-100)"></i>
+              <i style="background: var(--c-green-200)"></i>
+              <i style="background: var(--c-green-600)"></i>
+              больше
+            </span>
+          </div>
+        </section>
+
+        <div class="section-head">
+          <h2 class="section-head__title">Цели на неделю</h2>
+          <span class="section-head__meta">2 из 3</span>
+        </div>
+
+        <section class="goal-card" style="--habit-soft: #e6eef6" aria-label="Чтение, 2 из 3 на этой неделе">
+          <span class="goal-card__icon" aria-hidden="true">📖</span>
+          <div class="goal-card__text">
+            <div class="goal-card__top">
+              <span class="goal-card__name">Чтение</span>
+              <span class="goal-card__badge">Цель недели</span>
+            </div>
+            <div class="goal-card__meta">
+              <span class="goal-dots" aria-hidden="true"><i class="is-on"></i><i class="is-on"></i><i></i></span>
+              <span>2 из 3 · осталось 1 раз</span>
+              <span class="goal-card__streak">
+                <svg class="icon"><use href="#i-flame" /></svg>
+                2 недели
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <div class="section-head">
+          <h2 class="section-head__title">По привычкам</h2>
+          <span class="section-head__meta">30 дней</span>
+        </div>
+
+        <div class="stats-list">
+          <article class="stat-card" style="--habit-soft: #e4efe8">
+            <span class="stat-card__icon" aria-hidden="true">💧</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <span class="stat-card__name">Вода</span>
+                <span class="stat-card__pct">96%</span>
+              </div>
+              <p class="stat-card__meta">Серия 12 · лучшая 28</p>
+            </div>
+          </article>
+          <article class="stat-card" style="--habit-soft: #e6eef6">
+            <span class="stat-card__icon" aria-hidden="true">📖</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <span class="stat-card__name">Чтение</span>
+                <span class="stat-card__pct">72%</span>
+              </div>
+              <p class="stat-card__meta">Цель 3 раза в неделю · 2 из 3</p>
+            </div>
+          </article>
+          <article class="stat-card" style="--habit-soft: #f7e4df">
+            <span class="stat-card__icon" aria-hidden="true">🏃</span>
+            <div class="stat-card__text">
+              <div class="stat-card__top">
+                <span class="stat-card__name">Зарядка 10 минут</span>
+                <span class="stat-card__pct">64%</span>
+              </div>
+              <p class="stat-card__meta">Серия 4 · лучшая 9</p>
+            </div>
+          </article>
+        </div>
+      </main>
+
+      <nav class="tabbar" aria-label="Основная навигация">
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-today" /></svg>
+          <span>Сегодня</span>
+        </a>
+        <a class="tab is-active" href="#">
+          <svg class="icon"><use href="#i-chart" /></svg>
+          <span>Статистика</span>
+        </a>
+        <a class="tab" href="#">
+          <svg class="icon"><use href="#i-settings" /></svg>
+          <span>Настройки</span>
+        </a>
+      </nav>
+    </div>
+
+    <script src="../styles/ui.js"></script>
+    <script>
+      const bars = [
+        { day: "Пн", value: 100, count: "5/5" },
+        { day: "Вт", value: 80, count: "4/5" },
+        { day: "Ср", value: 100, count: "4/4" },
+        { day: "Чт", value: 60, count: "3/5" },
+        { day: "Пт", value: 100, count: "4/4" },
+        { day: "Сб", value: 75, count: "3/4" },
+        { day: "Вс", value: 50, count: "2/4" },
+      ];
+      document.querySelector("[data-bars]").innerHTML = bars
+        .map(
+          (bar) => `
+          <div class="bar">
+            <span class="bar__value">${bar.count}</span>
+            <span class="bar__track"><i class="bar__fill" style="height:${bar.value}%"></i></span>
+            <span class="bar__label">${bar.day}</span>
+          </div>`,
+        )
+        .join("");
+
+      const pattern = [4, 3, 4, 2, 4, 3, 4, 3, 4, 4, 1, 4, 3, 4];
+      const heatLevels = Array.from({ length: 84 }, (_, index) => {
+        const week = Math.floor(index / 7);
+        const day = index % 7;
+        if (day === 6 && week % 4 === 2) return 0;
+        if (day === 5 && week % 5 === 1) return 1;
+        return pattern[(index + week * 3) % pattern.length];
+      });
+      document.querySelector("[data-heatmap]").innerHTML = heatLevels
+        .map(
+          (level, index) =>
+            `<span class="heat${index === heatLevels.length - 1 ? " is-today" : ""}" data-level="${level}"></span>`,
+        )
+        .join("");
+    </script>
+  </body>
+</html>

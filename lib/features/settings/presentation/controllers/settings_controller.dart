@@ -65,6 +65,14 @@ class SettingsController extends ChangeNotifier {
     return _update(_settings.copyWith(onboardingCompleted: true));
   }
 
+  /// Applies settings restored from a backup file.
+  ///
+  /// The value is persisted exactly as in the file; the import screen calls
+  /// this only after the backup has been fully validated.
+  Future<void> applyImported(AppSettings next) {
+    return _update(next);
+  }
+
   /// Restores reminder defaults and the system theme after a data reset.
   /// The onboarding flag survives, so the user returns to the empty Today
   /// screen instead of seeing the introduction again.

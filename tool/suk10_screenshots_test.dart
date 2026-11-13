@@ -24,6 +24,7 @@ import 'package:habit_tracker/features/habits/domain/models/habit.dart';
 import 'package:habit_tracker/features/habits/domain/repositories/habit_repository.dart';
 import 'package:habit_tracker/features/habits/presentation/controllers/habit_list_controller.dart';
 import 'package:habit_tracker/features/habits/presentation/screens/habit_form_screen.dart';
+import 'package:habit_tracker/features/reminders/domain/reminder_scheduler.dart';
 import 'package:habit_tracker/features/settings/domain/models/app_settings.dart';
 import 'package:habit_tracker/features/settings/domain/repositories/settings_repository.dart';
 import 'package:habit_tracker/features/settings/presentation/controllers/settings_controller.dart';
@@ -201,6 +202,7 @@ Widget _host({
   final settingsRepo = _FakeSettingsRepository();
   return MultiProvider(
     providers: [
+      Provider<ReminderScheduler>.value(value: const NoopReminderScheduler()),
       ChangeNotifierProvider<HabitListController>(
         create: (_) => HabitListController(habitsRepo)..load(),
       ),
@@ -221,6 +223,33 @@ Widget _host({
       home: home,
     ),
   );
+}
+
+Future<void> _reveal(WidgetTester tester, Finder target) async {
+  final list = find.byType(ListView);
+  for (var attempt = 0; attempt < 10 && target.evaluate().isEmpty; attempt++) {
+    await tester.drag(list, const Offset(0, -220));
+    await tester.pumpAndSettle();
+  }
+  expect(target, findsWidgets);
+  await tester.ensureVisible(target.first);
+  await tester.pumpAndSettle();
+  final screenHeight =
+      tester.view.physicalSize.height / tester.view.devicePixelRatio;
+  if (tester.getCenter(target.first).dy > screenHeight - 130) {
+    await tester.drag(list, const Offset(0, -110));
+    await tester.pumpAndSettle();
+  }
+}
+
+Future<void> _enableIntervalReminder(WidgetTester tester) async {
+  await _reveal(tester, find.byType(Switch));
+  await tester.tap(find.byType(Switch).first);
+  await tester.pumpAndSettle();
+  await _reveal(tester, find.text('Каждые N часов'));
+  await tester.tap(find.text('Каждые N часов'));
+  await tester.pumpAndSettle();
+  await _reveal(tester, find.text('До'));
 }
 
 Future<void> _capture(
@@ -259,6 +288,12 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
+    // AppShell listens to widget taps; there is no Android host in a widget
+    // test, so answer the plugin channel instead of letting it throw.
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(const MethodChannel('home_widget/updates'), (
+          MethodCall call,
+        ) async => null);
     await initializeDateFormatting('ru');
     await _loadFonts();
   });
@@ -294,6 +329,23 @@ void main() {
       formKey,
     );
     await _capture(tester, formKey, 'form');
+
+    // 3b. Interval reminder block for the v1.1 store card.
+    final intervalKey = GlobalKey();
+    await _pump(
+      tester,
+      _host(
+        home: const HabitFormScreen(
+          initialName: 'Пить воду',
+          initialIconKey: 'water',
+          initialColorKey: 'green',
+        ),
+        habits: habits,
+      ),
+      intervalKey,
+    );
+    await _enableIntervalReminder(tester);
+    await _capture(tester, intervalKey, 'form-interval');
 
     // 4. Settings tab.
     final settingsKey = GlobalKey();

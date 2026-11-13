@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark companion of the widget palette (design/WIDGET_SPEC §5). -->
+    <color name="widget_surface">#1A211C</color>
+    <color name="widget_surface_done">#1E2F26</color>
+    <color name="widget_text_primary">#EDF2EE</color>
+    <color name="widget_text_secondary">#A9B3AC</color>
+    <color name="widget_accent">#58A985</color>
+    <color name="widget_on_accent">#0D1A13</color>
+    <color name="widget_track">#2C362E</color>
+    <color name="widget_check_empty">#5E7164</color>
+    <color name="widget_streak_text">#E0A354</color>
+    <color name="widget_streak_bg">#3A2A16</color>
+</resources>

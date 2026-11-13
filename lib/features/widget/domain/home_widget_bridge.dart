@@ -1,9 +1,35 @@
+/// One habit row shown by the 4×2 widget.
+class HomeWidgetItem {
+  const HomeWidgetItem({
+    required this.name,
+    required this.done,
+    required this.streak,
+    required this.emoji,
+  });
+
+  final String name;
+  final bool done;
+  final int streak;
+  final String emoji;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'name': name,
+    'done': done,
+    'streak': streak,
+    'emoji': emoji,
+  };
+}
+
 /// Data pushed to the Android home screen widget.
 class HomeWidgetSnapshot {
   const HomeWidgetSnapshot({
     required this.completed,
     required this.total,
     required this.pendingNames,
+    required this.date,
+    this.items = const <HomeWidgetItem>[],
+    this.topName,
+    this.topStreak = 0,
   });
 
   final int completed;
@@ -12,7 +38,18 @@ class HomeWidgetSnapshot {
   /// Names of habits still to do today, in display order.
   final List<String> pendingNames;
 
-  String get progressLabel => total == 0 ? 'Нет привычек' : '$completed из $total';
+  /// Calendar day (`yyyy-MM-dd`) the snapshot was built for.
+  final String date;
+
+  /// First habits of today, at most three, in display order.
+  final List<HomeWidgetItem> items;
+
+  /// Habit with the longest current streak, if any.
+  final String? topName;
+  final int topStreak;
+
+  String get progressLabel =>
+      total == 0 ? 'Нет привычек' : '$completed из $total';
 
   String get pendingLabel {
     if (total == 0) {
@@ -22,6 +59,21 @@ class HomeWidgetSnapshot {
       return 'Всё выполнено';
     }
     return pendingNames.take(3).join(' · ');
+  }
+
+  /// `empty`, `active`, `done` or `streak`; staleness is added natively by
+  /// comparing [date] with the device date.
+  String get state {
+    if (total == 0) {
+      return 'empty';
+    }
+    if (completed >= total) {
+      return 'done';
+    }
+    if (topStreak >= 7) {
+      return 'streak';
+    }
+    return 'active';
   }
 }
 

@@ -3,9 +3,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:habit_tracker/core/utils/date_key.dart';
 import 'package:habit_tracker/core/utils/weekdays.dart';
 import 'package:habit_tracker/features/habits/domain/models/habit.dart';
 import 'package:habit_tracker/features/habits/domain/repositories/habit_repository.dart';
+import 'package:habit_tracker/features/habits/presentation/constants/habit_icons.dart';
 import 'package:habit_tracker/features/reminders/domain/reminder_plan.dart';
 import 'package:habit_tracker/features/reminders/domain/reminder_scheduler.dart';
 import 'package:habit_tracker/features/widget/domain/home_widget_bridge.dart';
@@ -24,7 +26,7 @@ class HabitListController extends ChangeNotifier {
        _homeWidget = homeWidget,
        _uuid = uuid ?? const Uuid();
 
-  static const int maxNameLength = 40;
+  static const int maxNameLength = Habit.maxNameLength;
 
   final HabitRepository _repository;
   final ReminderScheduler? _reminders;
@@ -192,6 +194,10 @@ class HabitListController extends ChangeNotifier {
     }
     _notify();
     await _pushWidget();
+    if (_eveningReminder != null) {
+      // Completion changes whether today's evening nudge is still needed.
+      await syncReminders();
+    }
     return result;
   }
 
@@ -290,11 +296,37 @@ class HabitListController extends ChangeNotifier {
         .where((habit) => !habit.isCompletedToday)
         .map((habit) => habit.name)
         .toList();
+
+    var topName = today.isEmpty ? null : today.first.name;
+    var topStreak = 0;
+    final items = <HomeWidgetItem>[];
+    for (final habit in today) {
+      final streak = habit.currentStreak();
+      if (streak > topStreak) {
+        topStreak = streak;
+        topName = habit.name;
+      }
+      if (items.length < 3) {
+        items.add(
+          HomeWidgetItem(
+            name: habit.name,
+            done: habit.isCompletedToday,
+            streak: streak,
+            emoji: HabitIcons.resolve(habit.iconKey).glyph,
+          ),
+        );
+      }
+    }
+
     await bridge.push(
       HomeWidgetSnapshot(
         completed: today.length - pending.length,
         total: today.length,
         pendingNames: pending,
+        date: DateKey.from(DateTime.now()),
+        items: items,
+        topName: topStreak > 0 ? topName : null,
+        topStreak: topStreak,
       ),
     );
   }
@@ -306,6 +338,7 @@ class HabitListController extends ChangeNotifier {
       _errorMessage = null;
       _notify();
       await syncReminders();
+      await _pushWidget();
       return true;
     } catch (error) {
       _errorMessage = 'Не удалось сбросить данные. Попробуйте ещё раз.';

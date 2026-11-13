@@ -29,6 +29,9 @@ class Habit {
   static const String defaultColorKey = 'green';
   static const int allWeekdaysMask = Weekdays.everyDayMask;
 
+  /// Product limit shared by the form and the backup validator.
+  static const int maxNameLength = 40;
+
   /// 22:00 — the default end of a repeat window.
   static const int defaultWindowEndMinutes = 22 * 60;
 

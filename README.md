@@ -75,7 +75,7 @@ Flutter SDK и Android SDK на текущей машине установлен
 ```powershell
 flutter pub get
 flutter run                 # запуск на подключённом устройстве/эмуляторе
-flutter test                # 84 теста
+flutter test                # 121 тест
 dart analyze                # работает в текущем не-ASCII пути
 ```
 
@@ -304,15 +304,16 @@ Hive, box `habits`, один документ на привычку. Поля: `
 
 ## Что проверено
 
-- `flutter test` — 84 теста, все проходят (включая переоткрытие Hive-боксов,
+- `flutter test` — 121 тест, все проходят (включая переоткрытие Hive-боксов,
   страж typeId, расписание, онбординг, настройки, планировщик напоминаний,
   фолбэк часового пояса, статистику и снекбар с отменой).
 - `flutter analyze` на ASCII-зеркале — `No issues found!`.
 - `flutter build apk --debug` — APK собран, путь
   `build\app\outputs\flutter-apk\app-debug.apk`.
-- `scripts/build_release_apk.ps1` — два ARM release APK (16,1 и 18,4 МБ),
+- `scripts/build_release_apk.ps1` — два ARM release APK 1.1.1 (16,4 и 18,7 МБ),
   проверены `apksigner`, label «Привыкай», `ic_notification`, adaptive icon,
-  permissions и manifest напоминаний. Подпись пока debug — ждёт ключ компании.
+  permissions и manifest напоминаний. Подпись компании; актуальные
+  SHA-256 — `docs/REPORT_SUK-27.md`.
 
 Подробный отчёт RC, список фиксов и остаточных рисков —
 `docs/REPORT_SUK-13.md`; окружение и история сборок — `docs/BUILD.md`;

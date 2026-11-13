@@ -4,6 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:habit_tracker/app/app_info.dart';
 import 'package:habit_tracker/app/app_palette.dart';
 import 'package:habit_tracker/app/theme/app_spacing.dart';
+import 'package:habit_tracker/core/utils/russian_plural.dart';
+import 'package:habit_tracker/features/backup/data/backup_file_gateway.dart';
+import 'package:habit_tracker/features/backup/domain/backup_data.dart';
+import 'package:habit_tracker/features/backup/domain/backup_exception.dart';
+import 'package:habit_tracker/features/backup/domain/backup_service.dart';
 import 'package:habit_tracker/features/habits/presentation/controllers/habit_list_controller.dart';
 import 'package:habit_tracker/features/habits/presentation/utils/date_labels.dart';
 import 'package:habit_tracker/features/settings/domain/models/app_settings.dart';
@@ -14,6 +19,9 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.onDataReset, super.key});
 
   final VoidCallback onDataReset;
+
+  static const BackupService _backupService = BackupService();
+  static const BackupFileGateway _backupFiles = BackupFileGateway();
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
                 _SettingsRow(
                   icon: Icons.notifications_none_rounded,
                   title: 'Напоминания',
-                  subtitle: 'Одно уведомление в день',
+                  subtitle: 'По расписанию каждой привычки',
                   trailing: Switch.adaptive(
                     value: settings.settings.remindersEnabled,
                     onChanged: (value) => _setReminders(context, value),
@@ -95,7 +103,7 @@ class SettingsScreen extends StatelessWidget {
                 _SettingsRow(
                   icon: Icons.nightlight_outlined,
                   title: 'Вечернее напоминание',
-                  subtitle: 'Одно напоминание вечером проверить невыполненное',
+                  subtitle: 'Если остались невыполненные',
                   trailing: Switch.adaptive(
                     value: settings.settings.eveningReminderEnabled,
                     onChanged: (value) => _setEveningReminder(context, value),
@@ -105,7 +113,7 @@ class SettingsScreen extends StatelessWidget {
                   _SettingsRow(
                     icon: Icons.schedule_rounded,
                     title: 'Время вечернего напоминания',
-                    subtitle: 'По умолчанию 20:00',
+                    subtitle: 'Одно на весь список',
                     value: DateLabels.reminderTime(
                       settings.settings.eveningReminderMinutes,
                     ),
@@ -138,6 +146,18 @@ class SettingsScreen extends StatelessWidget {
             const _GroupLabel('Данные'),
             _SettingsGroup(
               children: [
+                _SettingsRow(
+                  icon: Icons.upload_file_outlined,
+                  title: 'Экспорт',
+                  subtitle: 'Привычки, история и настройки в JSON',
+                  onTap: () => _exportData(context),
+                ),
+                _SettingsRow(
+                  icon: Icons.download_outlined,
+                  title: 'Импорт',
+                  subtitle: 'Восстановить из файла резервной копии',
+                  onTap: () => _importData(context),
+                ),
                 _SettingsRow(
                   icon: Icons.delete_outline_rounded,
                   title: 'Сбросить все данные',
@@ -304,6 +324,115 @@ class SettingsScreen extends StatelessWidget {
       messenger.showSnackBar(SnackBar(content: Text(error)));
       controller.clearError();
     }
+  }
+
+  Future<void> _exportData(BuildContext context) async {
+    final habits = context.read<HabitListController>();
+    final settings = context.read<SettingsController>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final json = _backupService.encode(
+        habits: habits.habits,
+        settings: settings.settings,
+      );
+      final path = await _backupFiles.writeTemporary(json);
+      await _backupFiles.share(path);
+    } on BackupException catch (error) {
+      messenger.showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (error) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Не удалось экспортировать данные.')),
+      );
+    }
+  }
+
+  Future<void> _importData(BuildContext context) async {
+    final habits = context.read<HabitListController>();
+    final settings = context.read<SettingsController>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    final BackupData backup;
+    try {
+      final source = await _backupFiles.pickJsonText();
+      if (source == null) {
+        return;
+      }
+      backup = _backupService.decode(source);
+    } on BackupException catch (error) {
+      messenger.showSnackBar(SnackBar(content: Text(error.message)));
+      return;
+    } catch (error) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Не удалось импортировать данные.')),
+      );
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Импортировать данные?'),
+        content: Text(
+          'Привычки, история отметок и настройки будут заменены данными '
+          'из файла. В файле: ${backup.habits.length} '
+          '${RussianPlural.habits(backup.habits.length)}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Отмена'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Импортировать'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
+
+    final restored = await habits.replaceAll(backup.habits.toList());
+    if (!context.mounted) {
+      return;
+    }
+    if (!restored) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            habits.errorMessage ?? 'Не удалось восстановить данные.',
+          ),
+        ),
+      );
+      habits.clearError();
+      return;
+    }
+
+    await settings.applyImported(backup.settings);
+    if (!context.mounted) {
+      return;
+    }
+    final error = settings.errorMessage;
+    if (error != null) {
+      messenger.showSnackBar(SnackBar(content: Text(error)));
+      settings.clearError();
+      return;
+    }
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          'Импортировано: ${backup.habits.length} '
+          '${RussianPlural.habits(backup.habits.length)}',
+        ),
+      ),
+    );
   }
 
   Future<void> _resetData(BuildContext context) async {

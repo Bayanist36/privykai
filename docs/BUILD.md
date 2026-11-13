@@ -61,24 +61,25 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build_release_apk.ps1
 
 | Файл | ABI | Размер | versionCode |
 | --- | --- | --- | --- |
-| `app-arm64-v8a-release.apk` | arm64-v8a | 18,4 МБ | 2001 |
-| `app-armeabi-v7a-release.apk` | armeabi-v7a | 16,1 МБ | 1001 |
+| `app-arm64-v8a-release.apk` | arm64-v8a | 19,6 МБ | 2002 |
+| `app-armeabi-v7a-release.apk` | armeabi-v7a | 17,3 МБ | 1002 |
 
 Проверено для обеих сборок:
 
-- `applicationId` `com.sukhanovlabs.habittracker`, versionName `1.0.0`;
+- `applicationId` `com.sukhanovlabs.habittracker`, versionName `1.1.0`;
 - `application-label:'Привыкай'`;
 - `drawable/ic_notification` присутствует (BUG-02);
 - adaptive launcher icon (`mipmap-anydpi-v26`) присутствует;
 - `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`,
   `ScheduledNotificationReceiver`, `ScheduledNotificationBootReceiver` есть;
+- виджет: `HabitWidgetProvider`, `APPWIDGET_UPDATE`, meta-data
+  `android.appwidget.provider`, `res/xml/habit_widget_info`, layout 2×1/4×2;
 - `INTERNET` отсутствует;
 - `apksigner verify` проходит.
 
-**Подпись:** сертификат `C=US, O=Android, CN=Android Debug`. Keystore
-компании не создавался по решению задачи; конфигурация и скрипт готовы. Для
-публикации нужен `android/key.properties` и пересборка без
-`-AllowDebugSignature`.
+**Подпись:** сертификат компании `CN=Sukhanov labs, O=Sukhanov labs, C=RU`
+из `android/key.properties`. Для публикации пересборка без
+`-AllowDebugSignature` не требуется.
 
 ## Сборка и подпись
 
@@ -126,9 +127,9 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/build_release_apk.ps1
 ```
 
-Ожидаемый результат: 84 теста зелёные, анализ без замечаний, debug APK и два
-ARM release APK в `build\app\outputs\flutter-apk\`, release-проверка зелёная
-(с `-AllowDebugSignature`, пока нет ключа компании).
+Ожидаемый результат: 104 теста зелёные (после SUK-17), анализ без замечаний,
+debug APK и два ARM release APK в `build\app\outputs\flutter-apk\`,
+release-проверка зелёная (с `-AllowDebugSignature`, пока нет ключа компании).
 
 ## Как проверить напоминание на устройстве
 
@@ -142,3 +143,52 @@ ARM release APK в `build\app\outputs\flutter-apk\`, release-проверка з
    включить — возвращаются.
 6. Сменить часовой пояс устройства и вернуться в приложение — время
    напоминания должно оставаться локальным (08:00, а не 11:00).
+
+## Обновление SUK-17 (3 ноября 2026)
+
+Актуальные решения, команды и ограничения — `docs/REPORT_SUK-17.md`.
+
+- Добавлены интервальные напоминания (каждые N часов в окне) и вечернее
+  напоминание.
+- `flutter test`: 104 теста зелёные; `dart analyze`: без замечаний.
+- Debug APK собран и проверен на временном AVD Android 15 (API 35):
+  2 ч / 08:00–22:00 даёт 56 alarms на неделю (8 в день), вечернее
+  напоминание добавляет 7 и снимается при выключении.
+- Release APK/AAB в SUK-17 не пересобирались; перед публикацией повторить
+  `scripts/build_release_apk.ps1` и `scripts/verify_release_apk.ps1`.
+
+## Обновление SUK-27 (3 ноября 2026, патч 1.1.1)
+
+Подробности — `docs/REPORT_SUK-27.md`.
+
+- Версия `1.1.1+3` (`pubspec.yaml`, `AppInfo.version` = `1.1.1`).
+- QA-24-01: сегодняшний слот вечернего напоминания при всех выполненных
+  привычках ставится одноразово на следующую неделю
+  (`repeatsWeekly: false`, `matchDateTimeComponents: null`); остальные дни
+  остаются еженедельными.
+- QA-24-02: диалог и снекбар импорта используют `RussianPlural.habits`;
+  тест на 1/2/5/11/21 добавлен.
+- QA-24-03: `home_widget` удалён вместе с Glance/WorkManager; снимок виджета
+  пишется через `WidgetChannel` в `MainActivity`. В release остались только
+  `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`, `VIBRATE`.
+- `flutter test` — 121 тест зелёный; `scripts/analyze.ps1` — без замечаний.
+- Release: `app-arm64-v8a-release.apk` versionCode 2003 / 18,7 МБ,
+  `app-armeabi-v7a-release.apk` versionCode 1003 / 16,4 МБ,
+  versionName `1.1.1`, подпись компании. В RuStore не загружались.
+
+## Обновление SUK-28 (13 ноября 2026, патч 1.1.1)
+
+Подробности — `docs/REPORT_SUK-28.md`.
+
+- Экран политики переписан под редакцию 1.1: экспорт/импорт JSON, виджет,
+  уведомления на экране блокировки, системный backup Android; абсолютная
+  формулировка «данные только на устройстве» убрана.
+- `AppInfo.privacyPolicyUrl` = `https://Bayanist36.github.io/privykai-privacy/privykai-privacy.html`;
+  добавлен `AppInfo.privacyPolicyEdition = '1.1'`. Ссылка выводится текстом,
+  приложение сеть не открывает и не имеет `INTERNET`.
+- Версия не менялась: `1.1.1+3`.
+- `flutter test` — 125 тестов зелёные (4 новых про экран политики);
+  `scripts/analyze.ps1` — без замечаний.
+- Release пересобран: arm64-v8a versionCode 2003 / 18,72 МБ,
+  armeabi-v7a versionCode 1003 / 16,41 МБ, подпись компании. В RuStore
+  не загружались.

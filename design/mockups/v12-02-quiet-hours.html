@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>v1.2 — тихие часы</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+    <link rel="stylesheet" href="../styles/v12.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <header class="appbar">
+        <button class="iconbtn" aria-label="Назад">
+          <svg class="icon"><use href="#i-back" /></svg>
+        </button>
+        <span class="appbar__title">Тихие часы</span>
+      </header>
+
+      <main class="body body--scroll" style="padding-bottom: 24px">
+        <div class="quiet-intro">
+          <span class="quiet-intro__badge" aria-hidden="true">
+            <svg class="icon"><use href="#i-moon" /></svg>
+          </span>
+          <div>
+            <h1 class="quiet-intro__title">Не беспокоим ночью</h1>
+            <p class="quiet-intro__text">
+              Напоминания не приходят в тихие часы. Привычка, серия и статистика
+              продолжают работать.
+            </p>
+          </div>
+        </div>
+
+        <div class="group" style="margin-top: 12px">
+          <div class="setting-row">
+            <span class="setting-row__icon" aria-hidden="true">
+              <svg class="icon"><use href="#i-moon" /></svg>
+            </span>
+            <div class="setting-row__text">
+              <p class="setting-row__title">Тихие часы</p>
+              <p class="setting-row__sub">Для всех напоминаний</p>
+            </div>
+            <span class="switch is-on" role="switch" aria-checked="true" aria-label="Тихие часы"></span>
+          </div>
+        </div>
+
+        <div class="quiet-times">
+          <button class="time-btn" aria-label="Начало тихих часов, 22:00">
+            <span class="time-btn__label">Начало</span>
+            <span class="time-btn__value">22:00</span>
+            <span class="time-btn__hint">сегодня</span>
+          </button>
+          <button class="time-btn" aria-label="Конец тихих часов, 08:00">
+            <span class="time-btn__label">Конец</span>
+            <span class="time-btn__value">08:00</span>
+            <span class="time-btn__hint">на следующий день</span>
+          </button>
+        </div>
+
+        <span class="quiet-duration">
+          <svg class="icon"><use href="#i-moon" /></svg>
+          10 часов тишины
+        </span>
+
+        <section class="timeline" aria-label="Окно тихих часов на суточной шкале">
+          <div class="timeline__track">
+            <span class="timeline__quiet" style="width: 33.333%"></span>
+            <span class="timeline__allowed" style="width: 58.333%"></span>
+            <span class="timeline__quiet" style="width: 8.334%"></span>
+          </div>
+          <div class="timeline__dots">
+            <span class="timeline__dot" style="left: 33.333%"><i>08:00</i></span>
+            <span class="timeline__dot" style="left: 41.667%"></span>
+            <span class="timeline__dot" style="left: 50%"></span>
+            <span class="timeline__dot" style="left: 58.333%"></span>
+            <span class="timeline__dot" style="left: 66.667%"></span>
+            <span class="timeline__dot" style="left: 75%"></span>
+            <span class="timeline__dot" style="left: 83.333%"></span>
+            <span class="timeline__dot is-muted" style="left: 95.833%"><i>23:00</i></span>
+          </div>
+          <div class="timeline__hours">
+            <span>00:00</span>
+            <span>06:00</span>
+            <span>12:00</span>
+            <span>18:00</span>
+            <span>24:00</span>
+          </div>
+          <div class="timeline__legend">
+            <span><i style="background: var(--c-sand-200)"></i>тишина</span>
+            <span><i style="background: var(--c-green-100); border: 1px solid var(--c-green-200)"></i>можно напоминать</span>
+          </div>
+        </section>
+
+        <div class="quiet-note">
+          <svg class="icon"><use href="#i-info" /></svg>
+          <span>
+            Первое напоминание после тишины — в 08:00. Пропущенные ночные
+            повторы не сдвигаются и не копятся.
+          </span>
+        </div>
+
+        <div class="group-label" style="margin-top: 14px">Что учитывается</div>
+        <div class="group" style="padding: 2px 14px">
+          <div class="quiet-check-row">
+            <svg class="icon"><use href="#i-check" /></svg>
+            <span class="quiet-check-row__text">Интервальные напоминания</span>
+            <span class="badge">каждые N часов</span>
+          </div>
+          <div class="divider"></div>
+          <div class="quiet-check-row">
+            <svg class="icon"><use href="#i-check" /></svg>
+            <span class="quiet-check-row__text">Обычные и вечернее напоминание</span>
+            <span class="badge">один раз</span>
+          </div>
+        </div>
+
+        <div class="quiet-note" style="margin-top: 8px; background: var(--c-amber-100); color: var(--c-amber-800)">
+          <svg class="icon" style="color: var(--c-amber-800)"><use href="#i-info" /></svg>
+          <span>
+            Если всё окно привычки попадает в тихие часы, напоминаний не будет.
+            Привычку можно отметить вручную.
+          </span>
+        </div>
+
+        <p class="quiet-apply">Применяется сразу · можно изменить в любой момент</p>
+      </main>
+    </div>
+
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

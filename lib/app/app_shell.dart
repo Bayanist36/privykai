@@ -8,6 +8,7 @@ import 'package:habit_tracker/features/reminders/domain/reminder_plan.dart';
 import 'package:habit_tracker/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:habit_tracker/features/settings/presentation/screens/settings_screen.dart';
 import 'package:habit_tracker/features/statistics/presentation/screens/statistics_screen.dart';
+import 'package:habit_tracker/features/widget/data/widget_channel.dart';
 
 /// Bottom navigation shell: Сегодня · Статистика · Настройки.
 class AppShell extends StatefulWidget {
@@ -22,16 +23,28 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   bool? _remindersEnabled;
   EveningReminder? _eveningReminder;
 
-  void _goToday() => setState(() => _index = 0);
+  void _goToday() {
+    if (mounted && _index != 0) {
+      setState(() => _index = 0);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // A tap on the home screen widget opens the same Activity; MainActivity
+    // forwards the launch intent so an already running app returns to Today.
+    WidgetChannel.instance.setMethodCallHandler((call) async {
+      if (call.method == WidgetChannel.tapMethod) {
+        _goToday();
+      }
+    });
   }
 
   @override
   void dispose() {
+    WidgetChannel.instance.setMethodCallHandler(null);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -40,6 +53,9 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _syncReminders();
+      // Refresh the widget too: the date may have changed while the app was
+      // in the background, which makes the saved snapshot stale.
+      context.read<HabitListController>().refreshWidget();
     }
   }
 

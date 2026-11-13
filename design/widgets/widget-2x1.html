@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=900, initial-scale=1" />
+    <title>Виджет 2×1 — варианты и состояния</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/widgets.css" />
+  </head>
+  <body class="wb" style="width: 900px">
+    <header class="wb-head">
+      <h1 class="wb-head__title">Виджет 2×1 · 152 × 72 dp</h1>
+      <p class="wb-head__sub">
+        Три варианта компоновки, светлая и тёмная тема, четыре состояния.
+        Экспорт @3x: 456 × 216 px. Безопасный отступ 8 dp.
+      </p>
+    </header>
+
+    <section class="wb-section">
+      <h2 class="wb-section__title">Вариант A — кольцо прогресса · рекомендуемый</h2>
+      <div class="wb-grid" id="board-a"></div>
+    </section>
+
+    <section class="wb-section">
+      <h2 class="wb-section__title">Варианты B и C — альтернативы</h2>
+      <div class="wb-grid" id="board-bc"></div>
+    </section>
+
+    <script>
+      const ring = (percent, done, empty) => {
+        const radius = 18;
+        const circumference = 2 * Math.PI * radius;
+        const dash = ((percent / 100) * circumference).toFixed(2);
+        const center = empty
+          ? '<span class="w-ring__check"><svg class="icon"><use href="#i-plus" /></svg></span>'
+          : done
+            ? '<span class="w-ring__check"><svg class="icon"><use href="#i-check" /></svg></span>'
+            : `<span class="w-ring__label">${percent}%</span>`;
+        return `<span class="w-ring" aria-hidden="true">
+          <svg viewBox="0 0 44 44">
+            <circle class="w-ring__track" cx="22" cy="22" r="${radius}"></circle>
+            <circle class="w-ring__fill" cx="22" cy="22" r="${radius}"
+              stroke-dasharray="${dash} ${circumference.toFixed(2)}"></circle>
+          </svg>
+          ${center}
+        </span>`;
+      };
+
+      const a = ({ dark, state }) => {
+        const shot = `2x1-A-${dark ? "dark" : "light"}-${state}`;
+        const cls = ["w", "w--2", "w-a", dark && "is-dark", state === "done" && "is-done"].filter(Boolean).join(" ");
+        let body;
+        if (state === "empty") {
+          body = `<div class="w2a">
+            <div class="w2a__text">
+              <span class="w-eyebrow">Сегодня</span>
+              <span class="w-count">Пусто</span>
+              <span class="w-note">Добавьте первую</span>
+            </div>
+            ${ring(0, false, true)}
+          </div>`;
+        } else if (state === "streak") {
+          body = `<div class="w2-streak">
+            <span class="w2-streak__badge"><svg class="icon"><use href="#i-flame" /></svg></span>
+            <div class="w2-streak__text">
+              <div class="w2-streak__name">Вода</div>
+              <div class="w2-streak__value">12 дней подряд</div>
+            </div>
+            <span class="w-check is-on"><svg class="icon"><use href="#i-check" /></svg></span>
+          </div>`;
+        } else {
+          const done = state === "done";
+          body = `<div class="w2a">
+            <div class="w2a__text">
+              <span class="w-eyebrow">${done ? "Готово" : "Сегодня"}</span>
+              <span class="w-count">${done ? "4" : "2"} <span>из 4</span></span>
+              <span class="w-note">${done ? "Всё выполнено" : "Осталось 2"}</span>
+            </div>
+            ${ring(done ? 100 : 50, done, false)}
+          </div>`;
+        }
+        return `<figure class="wb-item">
+          <div class="${cls}" data-shot="${shot}">${body}</div>
+          <figcaption class="wb-caption">A · ${dark ? "тёмная" : "светлая"} · ${
+            { active: "активна", done: "выполнено", empty: "пусто", streak: "серия" }[state]
+          }</figcaption>
+        </figure>`;
+      };
+
+      const b = (dark) => `<figure class="wb-item">
+        <div class="w w--2 w-b ${dark ? "is-dark" : ""}">
+          <div class="w-b__top">
+            <span class="w-eyebrow">Сегодня</span>
+            <span class="w-b__count">2 из 4</span>
+          </div>
+          <span class="w-b__text">Осталось 2 привычки</span>
+          <div class="w-b__dots" aria-hidden="true"><i class="is-on"></i><i class="is-on"></i><i></i><i></i></div>
+          <div class="w-bar"><i style="width: 50%"></i></div>
+        </div>
+        <figcaption class="wb-caption">B · ${dark ? "тёмная" : "светлая"} · активна</figcaption>
+      </figure>`;
+
+      const c = (dark) => `<figure class="wb-item">
+        <div class="w w--2 w-c ${dark ? "is-dark" : ""}">
+          <span class="w-c__value">2<span>/4</span></span>
+          <div class="w-c__right">
+            <div class="w-c__label">сегодня</div>
+            <div class="w-c__segs" aria-hidden="true"><i class="is-on"></i><i class="is-on"></i><i></i><i></i></div>
+          </div>
+        </div>
+        <figcaption class="wb-caption">C · ${dark ? "тёмная" : "светлая"} · активна</figcaption>
+      </figure>`;
+
+      const states = ["active", "done", "empty", "streak"];
+      document.getElementById("board-a").innerHTML = [
+        ...states.map((state) => a({ dark: false, state })),
+        ...states.map((state) => a({ dark: true, state })),
+      ].join("");
+      document.getElementById("board-bc").innerHTML = [b(false), b(true), c(false), c(true)].join("");
+    </script>
+
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

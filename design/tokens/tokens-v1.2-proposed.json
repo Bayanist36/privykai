@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "meta": {
+    "product": "Привыкай — трекер привычек",
+    "issue": "SUK-22",
+    "status": "proposal",
+    "base": "design-tokens.json",
+    "version": "1.2.0-proposal",
+    "updated": "2026-11-03",
+    "note": "Только изменения и дополнения. Базовые значения из design-tokens.json продолжают действовать, пока разработчик не подтвердит этот файл."
+  },
+  "color": {
+    "semantic": {
+      "onAccentMuted": {
+        "light": "rgba(255, 255, 255, 0.88)",
+        "dark": "rgba(13, 26, 19, 0.88)",
+        "replaces": "onAccent.withValues(alpha: 0.72)",
+        "reason": "3,94:1 (светлая) и 3,92:1 (тёмная) не проходят AA для текста 12–13 px; 88% даёт 5,02:1 и 5,30:1"
+      },
+      "textQuiet": {
+        "light": "#6B756D",
+        "dark": "#8A968E",
+        "reason": "Осмысленный текст «Серия начнётся сегодня»: 4,78:1 на белом и 5,35:1 на тёмной карточке. Текущий ink300 — 2,22:1, тёмный tertiary — 4,29:1"
+      },
+      "textPlaceholder": {
+        "light": "#A9B0AA",
+        "dark": "#7A857D",
+        "reason": "Только плейсхолдер при видимой подписи поля и disabled; не использовать для смыслового текста"
+      },
+      "borderField": {
+        "light": "#948C7C",
+        "dark": "#5E7164",
+        "reason": "Граница поля/чекбокса должна быть ≥3:1: 3,33:1 на белом и 3,15:1 на тёмной поверхности. Текущие sand100/sand200 — 1,26–1,46:1"
+      },
+      "borderCard": {
+        "light": "#C4BCAA",
+        "dark": "#3C4A40",
+        "reason": "Декоративная граница карточки. Для интерактивной карточки в тёмной теме использовать borderField"
+      },
+      "amberText": {
+        "light": "#8A4F13",
+        "dark": "#E0A354",
+        "reason": "Текст на amber100: 5,48:1 (светлая) и 6,26:1 (тёмная). amber600 на amber100 — 3,24:1, только для иконки"
+      },
+      "snackAction": {
+        "light": "#BFD9CB",
+        "dark": "#1F5C43",
+        "reason": "В тёмной теме снекбар светлый: зелёный #8CC6A8 на #E8EFE9 даёт 1,67:1. #1F5C43 — 6,72:1"
+      }
+    },
+    "habitDarkSoft": {
+      "green": "#203028",
+      "blue": "#1D2934",
+      "amber": "#332718",
+      "coral": "#33231F",
+      "violet": "#282436",
+      "teal": "#1D2E2C"
+    }
+  },
+  "typography": {
+    "family": "Inter",
+    "embedInApk": true,
+    "missingStyles": {
+      "bodyStrong": {
+        "size": 16,
+        "lineHeight": 22,
+        "weight": 600,
+        "usage": "название привычки; сейчас код использует 16/24"
+      },
+      "bodyCompact": {
+        "size": 15,
+        "lineHeight": 22,
+        "weight": 400,
+        "usage": "онбординг, описания, вторичный текст с крупным кеглем"
+      },
+      "labelStrong": {
+        "size": 15,
+        "lineHeight": 22,
+        "weight": 500,
+        "usage": "строки настроек, название в карточке статистики"
+      },
+      "statSmall": {
+        "size": 15,
+        "lineHeight": 22,
+        "weight": 600,
+        "usage": "проценты и счётчики внутри карточек"
+      },
+      "sectionTitle": {
+        "size": 15,
+        "lineHeight": 22,
+        "weight": 600,
+        "usage": "«Привычки», «По привычкам», «Динамика» — вместо titleLarge 20/26"
+      }
+    }
+  },
+  "sizing": {
+    "tabbarHeight": 76,
+    "bottomContentInset": 96,
+    "touchTarget": 48,
+    "swatchTarget": 48,
+    "weekdayChipVisual": 40,
+    "weekdayChipTarget": 48,
+    "cardGap": 10,
+    "cardPadX": 14,
+    "cardPadY": 12,
+    "heroPad": 18,
+    "emptyArtSize": 148
+  },
+  "radius": {
+    "button": 16,
+    "dialog": 24,
+    "input": 12,
+    "card": 16,
+    "sheet": 24,
+    "fab": 18
+  },
+  "exceptions": {
+    "offGridSpacing": [
+      10,
+      14,
+      18
+    ],
+    "note": "10/14/18 остаются как именованные плотностные токены (cardGap, cardPadX, cardPadY, heroPad), а не как произвольные числа в виджетах"
+  }
+}

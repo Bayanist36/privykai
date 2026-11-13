@@ -11,6 +11,7 @@ class PlannedReminder {
     required this.weekdayIndex,
     required this.dateTime,
     this.slotIndex = 0,
+    this.repeatsWeekly = true,
   });
 
   final int id;
@@ -20,22 +21,42 @@ class PlannedReminder {
   /// Position inside the day: 0 for a single daily reminder, 0…N for the
   /// repeats of an interval reminder.
   final int slotIndex;
+
+  /// Whether the scheduler should use a weekly `matchDateTimeComponents`.
+  ///
+  /// `false` schedules a single occurrence at [dateTime] and is used for the
+  /// evening reminder of a fully completed day.
+  final bool repeatsWeekly;
 }
 
 /// Evening "did you finish your habits?" reminder, configured globally.
 @immutable
 class EveningReminder {
-  const EveningReminder({required this.minutes});
+  const EveningReminder({required this.minutes, this.skipToday = false});
 
   /// Minutes since midnight.
   final int minutes;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is EveningReminder && other.minutes == minutes;
+  /// When true, today's occurrence is moved to the next week because every
+  /// habit for today is already completed. Other weekdays keep their slot.
+  final bool skipToday;
+
+  EveningReminder copyWith({int? minutes, bool? skipToday}) {
+    return EveningReminder(
+      minutes: minutes ?? this.minutes,
+      skipToday: skipToday ?? this.skipToday,
+    );
+  }
 
   @override
-  int get hashCode => minutes.hashCode;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EveningReminder &&
+          other.minutes == minutes &&
+          other.skipToday == skipToday;
+
+  @override
+  int get hashCode => Object.hash(minutes, skipToday);
 }
 
 abstract final class ReminderPlan {
@@ -160,6 +181,12 @@ abstract final class ReminderPlan {
   }
 
   /// One evening reminder per weekday when [evening] is set.
+  ///
+  /// [EveningReminder.skipToday] keeps a fully completed day quiet. The
+  /// plugin's `dayOfWeekAndTime` recurrence only compares the weekday and the
+  /// time, so shifting the start date by a week still fires today (QA-24-01).
+  /// Therefore the suppressed day is scheduled as a one-shot for next week,
+  /// while the other weekdays keep their weekly recurrence.
   static List<PlannedReminder> eveningPlan({
     required EveningReminder? evening,
     required DateTime now,
@@ -167,18 +194,85 @@ abstract final class ReminderPlan {
     if (evening == null) {
       return const <PlannedReminder>[];
     }
+    final todayIndex = now.weekday - 1;
     return <PlannedReminder>[
       for (var index = 0; index < 7; index++)
-        PlannedReminder(
-          id: eveningReminderId(index),
+        _eveningReminder(
+          now: now,
           weekdayIndex: index,
-          dateTime: nextOccurrence(
-            now: now,
-            weekdayIndex: index,
-            minutesSinceMidnight: evening.minutes,
-          ),
+          minutes: evening.minutes,
+          skipToday: evening.skipToday && index == todayIndex,
         ),
     ];
+  }
+
+  static PlannedReminder _eveningReminder({
+    required DateTime now,
+    required int weekdayIndex,
+    required int minutes,
+    required bool skipToday,
+  }) {
+    final first = nextOccurrence(
+      now: now,
+      weekdayIndex: weekdayIndex,
+      minutesSinceMidnight: minutes,
+    );
+    final isToday =
+        first.year == now.year &&
+        first.month == now.month &&
+        first.day == now.day;
+    final skipped = skipToday && isToday;
+    return PlannedReminder(
+      id: eveningReminderId(weekdayIndex),
+      weekdayIndex: weekdayIndex,
+      dateTime: skipped
+          ? nextOccurrence(
+              now: first.add(const Duration(minutes: 1)),
+              weekdayIndex: weekdayIndex,
+              minutesSinceMidnight: minutes,
+            )
+          : first,
+      repeatsWeekly: !skipped,
+    );
+  }
+
+  /// Suppresses today's evening nudge when every habit scheduled for [now]
+  /// is already completed (or there are no habits at all).
+  static EveningReminder? effectiveEvening({
+    required EveningReminder? evening,
+    required List<Habit> habits,
+    required DateTime now,
+  }) {
+    if (evening == null) {
+      return null;
+    }
+    final today = habits.where((habit) => habit.isScheduledOn(now)).toList();
+    final allDone =
+        today.isEmpty || today.every((habit) => habit.isCompletedOn(now));
+    return evening.copyWith(skipToday: allDone);
+  }
+
+  /// Keeps the pending reminders closest to now when a plan is larger than
+  /// [limit].
+  ///
+  /// Some OEMs silently drop alarms above roughly 500 pending notifications.
+  /// Sorting by time and cutting the tail preserves the nearest reminders
+  /// instead of losing them.
+  static const int maxPendingNotifications = 400;
+
+  static List<PlannedReminder> capToLimit(
+    Iterable<PlannedReminder> plan, {
+    int limit = maxPendingNotifications,
+  }) {
+    if (limit <= 0) {
+      return const <PlannedReminder>[];
+    }
+    final sorted = plan.toList()
+      ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+    if (sorted.length <= limit) {
+      return sorted;
+    }
+    return sorted.sublist(0, limit);
   }
 
   /// Human label of the next scheduled day for a freshly created habit.

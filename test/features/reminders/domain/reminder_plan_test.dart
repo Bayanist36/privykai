@@ -209,4 +209,124 @@ void main() {
       'понедельник',
     );
   });
+
+  group('ReminderPlan.eveningPlan with skipToday', () {
+    test('makes today’s occurrence a one-shot next week', () {
+      final plan = ReminderPlan.eveningPlan(
+        evening: const EveningReminder(minutes: 20 * 60, skipToday: true),
+        now: DateTime(2026, 10, 23, 19), // Friday
+      );
+
+      final friday = plan.firstWhere((reminder) => reminder.weekdayIndex == 4);
+      final monday = plan.firstWhere((reminder) => reminder.weekdayIndex == 0);
+
+      expect(friday.dateTime, DateTime(2026, 10, 30, 20));
+      expect(friday.repeatsWeekly, isFalse);
+      expect(monday.dateTime, DateTime(2026, 10, 26, 20));
+      expect(monday.repeatsWeekly, isTrue);
+      expect(plan.where((reminder) => reminder.repeatsWeekly), hasLength(6));
+    });
+
+    test('keeps the weekly repeat when today’s time has already passed', () {
+      final plan = ReminderPlan.eveningPlan(
+        evening: const EveningReminder(minutes: 20 * 60, skipToday: true),
+        now: DateTime(2026, 10, 23, 21), // Friday, later than 20:00
+      );
+
+      final friday = plan.firstWhere((reminder) => reminder.weekdayIndex == 4);
+      expect(friday.dateTime, DateTime(2026, 10, 30, 20));
+      expect(friday.repeatsWeekly, isTrue);
+    });
+
+    test('keeps every weekday weekly when today is not skipped', () {
+      final plan = ReminderPlan.eveningPlan(
+        evening: const EveningReminder(minutes: 20 * 60),
+        now: DateTime(2026, 10, 23, 19), // Friday
+      );
+
+      expect(plan.every((reminder) => reminder.repeatsWeekly), isTrue);
+      final friday = plan.firstWhere((reminder) => reminder.weekdayIndex == 4);
+      expect(friday.dateTime, DateTime(2026, 10, 23, 20));
+    });
+  });
+
+  group('ReminderPlan.effectiveEvening', () {
+    Habit habit({List<String> completedDates = const <String>[]}) {
+      return Habit(
+        id: 'habit-1',
+        name: 'Вода',
+        iconKey: 'water',
+        createdAt: DateTime(2026, 1, 1),
+        weekdaysMask: 0x7F,
+        reminderMinutes: 8 * 60,
+        completedDates: completedDates,
+      );
+    }
+
+    test('suppresses the nudge when every habit is completed', () {
+      final evening = ReminderPlan.effectiveEvening(
+        evening: const EveningReminder(minutes: 20 * 60),
+        habits: <Habit>[
+          habit(completedDates: const <String>['2026-10-23']),
+        ],
+        now: DateTime(2026, 10, 23, 19),
+      );
+
+      expect(evening?.skipToday, isTrue);
+    });
+
+    test('keeps the nudge when a habit is still open', () {
+      final evening = ReminderPlan.effectiveEvening(
+        evening: const EveningReminder(minutes: 20 * 60),
+        habits: <Habit>[habit()],
+        now: DateTime(2026, 10, 23, 19),
+      );
+
+      expect(evening?.skipToday, isFalse);
+    });
+
+    test('suppresses the nudge when there are no habits', () {
+      final evening = ReminderPlan.effectiveEvening(
+        evening: const EveningReminder(minutes: 20 * 60),
+        habits: const <Habit>[],
+        now: DateTime(2026, 10, 23, 19),
+      );
+
+      expect(evening?.skipToday, isTrue);
+    });
+  });
+
+  group('ReminderPlan.capToLimit', () {
+    test('keeps the nearest reminders and drops the distant tail', () {
+      final plan = <PlannedReminder>[
+        for (var hour = 10; hour < 15; hour++)
+          PlannedReminder(
+            id: hour,
+            weekdayIndex: 0,
+            dateTime: DateTime(2026, 10, 26, hour),
+          ),
+      ];
+
+      final capped = ReminderPlan.capToLimit(plan, limit: 3);
+
+      expect(capped, hasLength(3));
+      expect(capped.map((reminder) => reminder.dateTime.hour), <int>[
+        10,
+        11,
+        12,
+      ]);
+    });
+
+    test('returns the whole plan when it fits', () {
+      final plan = <PlannedReminder>[
+        PlannedReminder(
+          id: 1,
+          weekdayIndex: 0,
+          dateTime: DateTime(2026, 10, 26, 10),
+        ),
+      ];
+
+      expect(ReminderPlan.capToLimit(plan, limit: 400), hasLength(1));
+    });
+  });
 }

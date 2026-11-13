@@ -825,9 +825,13 @@ class _ReminderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = context.palette;
     final textTheme = Theme.of(context).textTheme;
-    final summary = _isInterval
-        ? 'Каждые $intervalHours ч'
-        : DateLabels.reminderTime(minutes);
+    final summary = !enabled
+        ? 'В дни по расписанию'
+        : _isInterval
+        ? 'Каждые $intervalHours ч · '
+              '${DateLabels.reminderTime(minutes)}–'
+              '${DateLabels.reminderTime(windowEndMinutes)}'
+        : 'Один раз в день · ${DateLabels.reminderTime(minutes)}';
 
     return Material(
       color: palette.surface,
@@ -869,20 +873,15 @@ class _ReminderCard extends StatelessWidget {
                           color: palette.textPrimary,
                         ),
                       ),
-                      Text('В дни по расписанию', style: textTheme.labelSmall),
+                      Text(
+                        summary,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.labelSmall,
+                      ),
                     ],
                   ),
                 ),
-                if (enabled)
-                  Text(
-                    summary,
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 20 / 14,
-                      fontWeight: FontWeight.w600,
-                      color: palette.green700,
-                    ),
-                  ),
                 const SizedBox(width: AppSpacing.xs),
                 Switch.adaptive(value: enabled, onChanged: onToggle),
               ],
@@ -892,21 +891,10 @@ class _ReminderCard extends StatelessWidget {
             Divider(color: palette.borderSubtle, height: 1),
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 4),
-              child: Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.xs,
-                children: [
-                  ChoiceChip(
-                    label: const Text('Один раз в день'),
-                    selected: !_isInterval,
-                    onSelected: (_) => onIntervalChanged(null),
-                  ),
-                  ChoiceChip(
-                    label: const Text('Каждые N часов'),
-                    selected: _isInterval,
-                    onSelected: (_) => onIntervalChanged(intervalHours ?? 2),
-                  ),
-                ],
+              child: _ReminderModeSelector(
+                isInterval: _isInterval,
+                onChanged: (isInterval) =>
+                    onIntervalChanged(isInterval ? (intervalHours ?? 2) : null),
               ),
             ),
             if (_isInterval) ...[
@@ -917,27 +905,42 @@ class _ReminderCard extends StatelessWidget {
                   color: palette.textSecondary,
                 ),
                 title: const Text('Повторять каждые'),
-                trailing: DropdownButtonHideUnderline(
-                  child: DropdownButton<int>(
-                    value: intervalHours,
-                    isDense: true,
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
-                    items: [
-                      for (
-                        var hours = Habit.minIntervalHours;
-                        hours <= Habit.maxIntervalHours;
-                        hours++
-                      )
-                        DropdownMenuItem<int>(
-                          value: hours,
-                          child: Text('$hours ч'),
-                        ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        onIntervalChanged(value);
-                      }
-                    },
+                trailing: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 140),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<int>(
+                      value: intervalHours,
+                      isDense: true,
+                      isExpanded: true,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                      selectedItemBuilder: (context) => [
+                        for (
+                          var hours = Habit.minIntervalHours;
+                          hours <= Habit.maxIntervalHours;
+                          hours++
+                        )
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text('$hours ч'),
+                          ),
+                      ],
+                      items: [
+                        for (
+                          var hours = Habit.minIntervalHours;
+                          hours <= Habit.maxIntervalHours;
+                          hours++
+                        )
+                          DropdownMenuItem<int>(
+                            value: hours,
+                            child: Text('$hours ч'),
+                          ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          onIntervalChanged(value);
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -962,6 +965,103 @@ class _ReminderCard extends StatelessWidget {
               ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _ReminderModeSelector extends StatelessWidget {
+  const _ReminderModeSelector({
+    required this.isInterval,
+    required this.onChanged,
+  });
+
+  final bool isInterval;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Container(
+      constraints: const BoxConstraints(minHeight: 44),
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: palette.surfaceSubtle,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: _ReminderModeSegment(
+                label: 'Один раз в день',
+                selected: !isInterval,
+                onTap: () => onChanged(false),
+              ),
+            ),
+            const SizedBox(width: 3),
+            Expanded(
+              child: _ReminderModeSegment(
+                label: 'Каждые N часов',
+                selected: isInterval,
+                onTap: () => onChanged(true),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ReminderModeSegment extends StatelessWidget {
+  const _ReminderModeSegment({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: selected ? palette.surface : Colors.transparent,
+        elevation: selected ? 1 : 0,
+        borderRadius: BorderRadius.circular(AppRadius.xs + 1),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.xs + 1),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 38, minWidth: 44),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Center(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 18 / 13,
+                    fontWeight: FontWeight.w600,
+                    color: selected
+                        ? palette.textPrimary
+                        : palette.textSecondary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

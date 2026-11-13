@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=360, initial-scale=1" />
+    <title>v1.2 — цель «3 раза в неделю»</title>
+    <link rel="stylesheet" href="../styles/design-system.css" />
+    <link rel="stylesheet" href="../styles/screen.css" />
+    <link rel="stylesheet" href="../styles/v12.css" />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="statusbar" data-statusbar></div>
+
+      <header class="appbar">
+        <button class="iconbtn" aria-label="Назад">
+          <svg class="icon"><use href="#i-back" /></svg>
+        </button>
+        <span class="appbar__title">Новая привычка</span>
+      </header>
+
+      <main class="body body--scroll" style="padding-bottom: 96px">
+        <label class="field__label" for="habit-name">Название</label>
+        <div class="field__box is-focused">
+          <span class="field__value" id="habit-name">Читать 20 минут</span>
+        </div>
+        <div class="field__counter">16/40</div>
+
+        <div class="form-section">
+          <div class="form-label">
+            <span>Повторение</span>
+            <span style="color: var(--text-primary); font-weight: 600">3 раза в неделю</span>
+          </div>
+          <div class="mode-seg" role="tablist" aria-label="Режим повторения">
+            <span class="mode-seg__item" role="tab">Каждый день</span>
+            <span class="mode-seg__item" role="tab">Дни недели</span>
+            <span class="mode-seg__item is-active" role="tab" aria-selected="true">3 раза в неделю</span>
+          </div>
+
+          <div class="goal-panel">
+            <div class="goal-panel__head">
+              <div>
+                <p class="goal-panel__label">Цель на неделю</p>
+                <p class="goal-panel__hint">Отмечайте в любые дни — когда удобно.</p>
+              </div>
+              <div class="stepper" aria-label="Три раза в неделю">
+                <button class="stepper__btn" aria-label="Уменьшить цель">−</button>
+                <span class="stepper__value">3<span>раза</span></span>
+                <button class="stepper__btn" aria-label="Увеличить цель">+</button>
+              </div>
+            </div>
+
+            <div class="goal-week">
+              <span class="goal-week__day"><span class="goal-week__dot is-on"><svg class="icon"><use href="#i-check" /></svg></span>Пн</span>
+              <span class="goal-week__day"><span class="goal-week__dot is-on is-today"><svg class="icon"><use href="#i-check" /></svg></span>Вт</span>
+              <span class="goal-week__day"><span class="goal-week__dot"><svg class="icon"><use href="#i-check" /></svg></span>Ср</span>
+              <span class="goal-week__day"><span class="goal-week__dot"><svg class="icon"><use href="#i-check" /></svg></span>Чт</span>
+              <span class="goal-week__day"><span class="goal-week__dot"><svg class="icon"><use href="#i-check" /></svg></span>Пт</span>
+              <span class="goal-week__day"><span class="goal-week__dot"><svg class="icon"><use href="#i-check" /></svg></span>Сб</span>
+              <span class="goal-week__day"><span class="goal-week__dot"><svg class="icon"><use href="#i-check" /></svg></span>Вс</span>
+            </div>
+
+            <div class="goal-week__foot">
+              <span class="goal-progress"><i></i></span>
+              <span>2 из 3</span>
+            </div>
+          </div>
+
+          <div class="form-note">
+            <svg class="icon"><use href="#i-info" /></svg>
+            <span>
+              Неделя начинается в понедельник. Серия для такой цели считается
+              по неделям, а не по дням подряд.
+            </span>
+          </div>
+        </div>
+
+        <p class="preview-label">Так привычка выглядит в «Сегодня»</p>
+        <section class="goal-card" style="--habit-soft: #e6eef6" aria-label="Чтение, 2 из 3 на этой неделе">
+          <span class="goal-card__icon" aria-hidden="true">📖</span>
+          <div class="goal-card__text">
+            <div class="goal-card__top">
+              <span class="goal-card__name">Чтение</span>
+              <span class="goal-card__badge">2 из 3</span>
+            </div>
+            <div class="goal-card__meta">
+              <span class="goal-dots" aria-hidden="true"><i class="is-on"></i><i class="is-on"></i><i></i></span>
+              <span>На этой неделе · осталось 1 раз</span>
+            </div>
+          </div>
+          <span class="habit__check" aria-hidden="true" style="--habit-color: #3c6e9f">
+            <svg class="icon"><use href="#i-check" /></svg>
+          </span>
+        </section>
+
+        <div class="form-note" style="margin-top: 12px">
+          <svg class="icon"><use href="#i-bell" /></svg>
+          <span>
+            Напоминание в 08:00. Ночью не беспокоим: тихие часы 22:00–08:00.
+          </span>
+        </div>
+      </main>
+
+      <div class="form-footer">
+        <button class="btn btn--primary btn--block">Сохранить</button>
+      </div>
+    </div>
+
+    <script src="../styles/ui.js"></script>
+  </body>
+</html>

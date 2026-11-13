@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#F4F1E9</color>
+
+    <!-- Home screen widget (design/WIDGET_SPEC_v1.0.md §5). -->
+    <color name="widget_surface">#FFFFFF</color>
+    <color name="widget_surface_done">#EDF4EF</color>
+    <color name="widget_text_primary">#18201B</color>
+    <color name="widget_text_secondary">#6B756D</color>
+    <color name="widget_accent">#2A7052</color>
+    <color name="widget_on_accent">#FFFFFF</color>
+    <color name="widget_track">#EAE5DA</color>
+    <color name="widget_check_empty">#948C7C</color>
+    <color name="widget_streak_text">#8A4F13</color>
+    <color name="widget_streak_bg">#F8E9D2</color>
 </resources>
